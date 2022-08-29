@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ReactNativePackager" nodePath="project" reactNativePackagePath="$PROJECT_DIR$/node_modules/react-native" workingDirectory="$PROJECT_DIR$/example">
+    <scripts>
+      <item value="ios" />
+    </scripts>
+  </component>
+</project>
