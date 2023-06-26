@@ -1,5 +1,5 @@
-import {GenieKey, sharedState} from "reactgenie";
-import {GenieClass, GenieFunction, GenieProperty, DataClass, float, int} from "reactgenie"
+import {GenieKey, sharedState} from "reactgenie-lib";
+import {GenieClass, GenieFunction, GenieProperty, DataClass, float, int} from "reactgenie-lib"
 import "reflect-metadata";
 
 @GenieClass("A counter")

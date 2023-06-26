@@ -1,5 +1,5 @@
 {
-  "name": "reactgenie",
+  "name": "reactgenie-lib",
   "version": "1.0.0",
   "description": "A Toolkit for Multimodal Applications",
   "author": "valkjsaaa",
@@ -15,7 +15,6 @@
   "workspaces": [
     "example"
   ],
-  "private": true,
   "dependencies": {
     "@babel/core": "^7.18.13",
     "@expo/vector-icons": "^13.0.0",

@@ -1,5 +1,5 @@
 import React from "react";
-import {GenieClassInterface} from "reactgenie"
+import {GenieClassInterface} from "reactgenie-lib"
 import {CounterView} from "./CounterView";
 
 const CounterListViewImpl = (props: { elements: { name: string }[] }) => {

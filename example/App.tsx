@@ -3,7 +3,7 @@ import {default as ReactReduxFromImport, Provider} from 'react-redux'
 import {StyleSheet, View} from "react-native";
 import {reactGenieStore} from "./counterStore";
 import {CounterView} from "./CounterView";
-import {ModalityProvider, ReactFromModule, ReactReduxFromModule} from 'reactgenie'
+import {ModalityProvider, ReactFromModule, ReactReduxFromModule} from 'reactgenie-lib'
 import {CounterExamples} from "./genie/counter";
 import {CounterListView} from "./CounterListView";
 import {CounterAltView} from "./CounterAltView";

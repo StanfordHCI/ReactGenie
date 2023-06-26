@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save reactgenie
+npm install --save reactgenie-lib
 ```
 
 ## Usage

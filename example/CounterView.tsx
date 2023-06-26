@@ -1,7 +1,7 @@
 import {Counter} from "./genie/counter";
 import React from "react";
-import {GenieClassInterface} from "reactgenie"
-import {useGenieSelector, genieDispatch} from "reactgenie";
+import {GenieClassInterface} from "reactgenie-lib"
+import {useGenieSelector, genieDispatch} from "reactgenie-lib";
 
 const CounterViewImpl = (props: { name: string}) => {
     const counter: Counter = useGenieSelector(() => {

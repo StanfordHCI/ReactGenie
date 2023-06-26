@@ -6,8 +6,8 @@ module.exports = async function (env, argv) {
             ...env,
             babel: {
                 dangerouslyAddModulePathsToTranspile: [
-                    'lamp',
-                    'reactgenie'
+                    'reactgenie-dsl',
+                    'reactgenie-lib'
                 ]
             }
         },

@@ -5,7 +5,7 @@ import {
     GenieClassModifier,
     GenieObject,
     initGenie,
-    AllGenieObjects
+    AllGenieObjects, genieDispatch, sharedState
 } from "reactgenie-dsl";
 import {
     GenieClass,
@@ -20,9 +20,7 @@ import {
 export {GenieClass, GenieFunction, GenieKey, GenieProperty, DataClass, HelperClass, int, float} from "reactgenie-dsl";
 import React from "react";
 import * as lib from "./lib";
-import {genieDispatch, sharedState} from "reactgenie";
 import {ReactGenieState} from "./shared-store";
-
 export {AllGenieObjects} from "reactgenie-dsl"
 
 export interface GenieInterfaceStoreElement {

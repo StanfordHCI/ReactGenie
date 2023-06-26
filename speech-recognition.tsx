@@ -1,5 +1,4 @@
 import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
-import {ExampleParse} from "lamp/lib/nl/prompt-gen";
 import React, {useEffect, useState} from "react";
 import createSpeechServicesPonyfill from 'web-speech-cognitive-services';
 
