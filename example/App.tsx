@@ -7,6 +7,7 @@ import {ModalityProvider, ReactFromModule, ReactReduxFromModule} from 'reactgeni
 import {CounterExamples} from "./genie/counter";
 import {CounterListView} from "./CounterListView";
 import {CounterAltView} from "./CounterAltView";
+import ENV from './config';
 
 console.log("React is ReactFromModule", ReactFromModule === ReactFromImport)
 console.log("ReactRedux is ReactReduxFromModule: ", ReactReduxFromImport === ReactReduxFromModule)
@@ -18,7 +19,10 @@ const App = () => {
             <ModalityProvider
                 examples={CounterExamples}
                 displayTranscript={true}
-                codexApiKey={"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"}
+                codexApiKey={ENV.OPENAI_API_KEY!}
+                codexApiBaseUrl={ENV.OPENAI_API_BASE_URL!}
+                azureSpeechRegion={ENV.AZURE_SPEECH_REGION!}
+                azureSpeechKey={ENV.AZURE_SPEECH_KEY!}
                 autoStart={false}
                 extraPrompt={"// we are using voice recognition. so there may be errors. Try to think about words with similar sounds. For example \"address\" can actually be \"add this\"."}
             >

@@ -59,6 +59,9 @@ const cardStyle: StackNavigationOptions = {
 export const ModalityProvider = (props: {
     examples: ExampleParse[]
     codexApiKey: string
+    codexApiBaseUrl: string
+    azureSpeechRegion: string
+    azureSpeechKey: string
     displayTranscript: boolean
     autoStart: boolean
     extraPrompt: string
@@ -113,7 +116,8 @@ export const ModalityProvider = (props: {
             props.codexApiKey,
             undefined,
             props.examples,
-            props.extraPrompt
+            props.extraPrompt,
+            props.codexApiBaseUrl
         )
     }, [props.codexApiKey, props.examples])
 
