@@ -6,7 +6,7 @@ import { View } from "react-native";
 import createSpeechServicesPonyfill from "web-speech-cognitive-services";
 
 export const SpeechRecognizer = (props: {
-  startListening: boolean;
+  shouldListen: boolean;
   speechStatusCallback: (status: boolean, transcript: string) => void;
   speechResultCallback: (result: string) => void;
   azureSpeechRegion: string;
@@ -15,12 +15,22 @@ export const SpeechRecognizer = (props: {
   const { finalTranscript, interimTranscript, resetTranscript } =
     useSpeechRecognition();
   const [speechStatus, setSpeechStatus] = useState(false);
+  const [listening, setListening] = useState(false);
 
   useEffect(() => {
-    if (props.startListening) {
-      SpeechRecognition.startListening({ continuous: true, language: "en-US" });
+    if (props.shouldListen !== listening) {
+      if (props.shouldListen) {
+        SpeechRecognition.startListening({
+          continuous: false,
+          language: "en-US",
+        });
+        setListening(true);
+      } else {
+        SpeechRecognition.stopListening();
+        setListening(false);
+      }
     }
-  }, [props.startListening]);
+  }, [props.shouldListen]);
 
   useEffect(() => {
     // status is true if interimTranscript is not empty
@@ -29,19 +39,17 @@ export const SpeechRecognizer = (props: {
       setSpeechStatus(newStatus);
     }
     props.speechStatusCallback(newStatus, interimTranscript);
-    console.log(interimTranscript);
   }, [interimTranscript]);
 
   useEffect(() => {
     if (finalTranscript != "") {
       props.speechResultCallback(finalTranscript);
-      console.log(finalTranscript);
       resetTranscript();
       SpeechRecognition.stopListening();
-      SpeechRecognition.startListening({ continuous: true, language: "en-US" });
     }
   }, [finalTranscript]);
 
+  // initialize Azure speech services by creating a ponyfill
   useEffect(() => {
     const { SpeechRecognition: AzureSpeechRecognition } =
       createSpeechServicesPonyfill({

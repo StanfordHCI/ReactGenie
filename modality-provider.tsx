@@ -69,6 +69,13 @@ const cardStyle: StackNavigationOptions = {
   cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 };
 
+export const enum ListenerStateEnum {
+  Idle,
+  Listening,
+  Processing,
+  // Done,
+}
+
 export const ModalityProvider = (props: {
   examples: ExampleParse[];
   codexApiKey: string;
@@ -76,7 +83,6 @@ export const ModalityProvider = (props: {
   azureSpeechRegion: string;
   azureSpeechKey: string;
   displayTranscript: boolean;
-  autoStart: boolean;
   extraPrompt: string;
   children: React.ReactElement[] | React.ReactElement;
 }) => {
@@ -97,8 +103,6 @@ export const ModalityProvider = (props: {
   });
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-
-  const [startListening, setStartListening] = useState(props.autoStart);
 
   useEffect(() => {
     if (
@@ -178,15 +182,17 @@ export const ModalityProvider = (props: {
     []
   );
 
-  const [activeVoice, setActiveVoice] = useState(false);
-  const [listening, setListening] = useState(false);
+  const [listenerState, setListenerState] = useState(ListenerStateEnum.Idle);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
   const [mouseDown, setMouseDown] = useState(false);
-  const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    console.log("listener state changed", listenerState);
+  }, [listenerState]);
+
   const handleClick = (event) => {
-    console.log(listening);
-    if (listening || activeVoice) {
+    if (listenerState === ListenerStateEnum.Listening) {
       const x = event.clientX;
       const y = event.clientY;
       console.log(`Click position: (${x}, ${y})`);
@@ -194,26 +200,21 @@ export const ModalityProvider = (props: {
     }
     setMouseDown(false);
   };
-
   const handleDown = () => {
-    console.log(listening);
     setMouseDown(true);
   };
 
   const speechStatusCallback = (status, interimTranscript) => {
-    if (props.autoStart || activeVoice) {
+    if (listenerState === ListenerStateEnum.Listening) {
       console.log(`Speech status: ${status}`);
       if (status == true) {
-        setListening(status);
         console.log(`Interim transcript: ${interimTranscript}`);
         setInterimTranscript(interimTranscript);
       }
     }
   };
   const speechResultCallback = (finalTranscript) => {
-    if (props.autoStart || activeVoice) {
-      setListening(finalTranscript);
-      setListening(false);
+    if (listenerState === ListenerStateEnum.Listening) {
       console.log(`Final transcript: ${finalTranscript}`);
       setInterimTranscript(finalTranscript);
       setTranscript(finalTranscript);
@@ -221,32 +222,19 @@ export const ModalityProvider = (props: {
   };
 
   useEffect(() => {
-    setProcessing(false);
-    // navigator.mediaDevices.getUserMedia({audio: true})
-    // const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    // const recognition = new speechRecognition();
-    // recognition.onspeechstart = () => {
-    //     recognition.abort();
-    // }
-    // recognition.start();
-  }, []);
-
-  useEffect(() => {
-    if (transcript !== "" && (props.autoStart || activeVoice)) {
+    if (transcript !== "" && listenerState === ListenerStateEnum.Listening) {
       RetrieveInterfaces();
-      setProcessing(true);
-      if (!props.autoStart) {
-        setActiveVoice(false);
-      }
-      console.log(`user uttered: ${transcript}`);
-      lastTranscript = transcript;
-      GenieInterpreter.nlParser.parse(transcript).then(function (result) {
+      setListenerState(ListenerStateEnum.Processing);
+      lastTranscript = transcript; // TODO: use state instead of global variable
+      setTranscript("");
+      GenieInterpreter.nlParser.parse(lastTranscript).then(function (result) {
         console.log(`parsed result: ${result}`);
-        console.log(`ClickPoints: ${ClickPoints}`);
         setInterimTranscript("");
-        setProcessing(false);
+        setListenerState(ListenerStateEnum.Idle);
         let executionResult = executeGenieCode(result);
         if (genieCommandSuccess) {
+          // TODO show black box
+          // GenieInterpreter.nlParser.respond(transcript, result, executionResult.last()).then(function (result) {
           displayResult(executionResult);
         }
         ClickPoints.splice(0, ClickPoints.length);
@@ -255,7 +243,6 @@ export const ModalityProvider = (props: {
   }, [transcript]);
 
   useEffect(() => {
-    // not equal to null or undefined
     if (
       recentVoiceCommand !== null &&
       recentVoiceCommand !== undefined &&
@@ -279,7 +266,8 @@ export const ModalityProvider = (props: {
   // @ts-ignore
   return (
     <View style={{ flex: 1 }}>
-      {((props.autoStart && listening) || processing || activeVoice) && (
+      {(listenerState === ListenerStateEnum.Listening ||
+        listenerState === ListenerStateEnum.Processing) && (
         <div
           onMouseDown={handleDown}
           onClick={handleClick}
@@ -294,7 +282,7 @@ export const ModalityProvider = (props: {
             opacity: 0.5,
           }}
         >
-          {processing && (
+          {listenerState === ListenerStateEnum.Processing && (
             <div
               style={{
                 position: "absolute",
@@ -330,7 +318,6 @@ export const ModalityProvider = (props: {
           )}
         </div>
       )}
-      {!props.autoStart && (
         <div
           style={{
             position: "fixed",
@@ -341,13 +328,8 @@ export const ModalityProvider = (props: {
         >
           <TouchableOpacity
             onPress={() => {
-              setStartListening(true);
-              if (activeVoice) {
-                setActiveVoice(false);
-                setProcessing(false);
-              } else {
-                setActiveVoice(true);
-                setProcessing(false);
+              if (listenerState === ListenerStateEnum.Idle) {
+                setListenerState(ListenerStateEnum.Listening);
               }
             }}
           >
@@ -356,7 +338,10 @@ export const ModalityProvider = (props: {
                 width: 50,
                 height: 50,
                 borderRadius: 25,
-                backgroundColor: activeVoice ? "#0000ff" : "#cccccc",
+                backgroundColor:
+                  listenerState === ListenerStateEnum.Listening
+                    ? "#0000ff"
+                    : "#cccccc",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -365,11 +350,10 @@ export const ModalityProvider = (props: {
             </View>
           </TouchableOpacity>
         </div>
-      )}
       <SpeechRecognizer
         speechStatusCallback={speechStatusCallback}
         speechResultCallback={speechResultCallback}
-        startListening={startListening}
+        shouldListen={listenerState === ListenerStateEnum.Listening}
         azureSpeechRegion={props.azureSpeechRegion}
         azureSpeechKey={props.azureSpeechKey}
       />
