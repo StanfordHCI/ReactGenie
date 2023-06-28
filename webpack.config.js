@@ -1,4 +1,4 @@
 module.exports = {
-    name: "reactgenie-lib",
-    externals: { react: 'react' }
-}
+  name: "reactgenie-lib",
+  externals: { react: "react" },
+};
