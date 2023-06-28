@@ -370,6 +370,8 @@ export const ModalityProvider = (props: {
         speechStatusCallback={speechStatusCallback}
         speechResultCallback={speechResultCallback}
         startListening={startListening}
+        azureSpeechRegion={props.azureSpeechRegion}
+        azureSpeechKey={props.azureSpeechKey}
       />
       {gui}
       {snackbarVisible && (

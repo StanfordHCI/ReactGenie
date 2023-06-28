@@ -1,5 +1,5 @@
 // dictionary of genie object names to genie objects
-import {GenieViewWrapper} from "./genie-view-wrapper";
+import { GenieViewWrapper } from "./genie-view-wrapper";
 import {
   FuncDescriptor,
   GenieClassModifier,
@@ -31,12 +31,10 @@ export {
   float,
 } from "reactgenie-dsl";
 import React from "react";
-import {ReactGenieState} from "./shared-store";
-import SpeechRecognition from 'react-speech-recognition';
-import createSpeechServicesPonyfill from 'web-speech-cognitive-services';
+import { ReactGenieState } from "./shared-store";
 import * as lib from "./lib";
 
-export {AllGenieObjects} from "reactgenie-dsl"
+export { AllGenieObjects } from "reactgenie-dsl";
 
 export interface GenieInterfaceStoreElement {
   objectClassName: string;
@@ -151,13 +149,13 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
       let closest = genieInterfaces[0];
       let closestDistance = Math.sqrt(
         Math.pow(ClickPoints[0].x - closest.rect.x, 2) +
-        Math.pow(ClickPoints[0].y - closest.rect.y, 2)
+          Math.pow(ClickPoints[0].y - closest.rect.y, 2)
       );
       for (let i = 1; i < genieInterfaces.length; i++) {
         if (genieInterfaces[i].className !== currentClassName) continue;
         let distance = Math.sqrt(
           Math.pow(ClickPoints[0].x - genieInterfaces[i].rect.x, 2) +
-          Math.pow(ClickPoints[0].y - genieInterfaces[i].rect.y, 2)
+            Math.pow(ClickPoints[0].y - genieInterfaces[i].rect.y, 2)
         );
         if (distance < closestDistance) {
           closest = genieInterfaces[i];
@@ -191,34 +189,26 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
   );
 };
 
-export function initReactGenie(azureSpeechRegion: string, azureSpeechKey: string) {
-  let reactGenieStore = initGenie({initGenieClassModifier: reactGenieClassModifier});
+export function initReactGenie() {
+  let reactGenieStore = initGenie({
+    initGenieClassModifier: reactGenieClassModifier,
+  });
   genieDispatch(() => {
     let reactGenieState = sharedState as ReactGenieState;
     reactGenieState.navState = {
       objectViewClassName: null,
-      objectConstructorParams: null
-    }
+      objectConstructorParams: null,
+    };
     reactGenieState.navStack = 0;
     reactGenieState.command = {
       command: "",
-      result: ""
-    }
+      result: "",
+    };
     reactGenieState.message = {
       message: "",
-      type: "info"
-    }
+      type: "info",
+    };
   });
-
-  console.log(azureSpeechRegion, azureSpeechKey)
-  const {SpeechRecognition: AzureSpeechRecognition} = createSpeechServicesPonyfill({
-    credentials: {
-      region: azureSpeechRegion,
-      subscriptionKey: azureSpeechKey
-    }
-  });
-  SpeechRecognition.applyPolyfill(AzureSpeechRecognition);
-
   return reactGenieStore;
 }
 
