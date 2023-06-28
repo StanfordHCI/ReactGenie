@@ -39,8 +39,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const Stack = createStackNavigator();
 export let GenieInterpreter: NlInterpreter;
 
-let lastTranscript = "";
-
 const DefaultScreen =
   (children) =>
   ({ navigation }) => {
@@ -221,11 +219,13 @@ export const ModalityProvider = (props: {
     }
   };
 
+  const [lastTranscript, setLastTranscript] = useState("");
+
   useEffect(() => {
     if (transcript !== "" && listenerState === ListenerStateEnum.Listening) {
       RetrieveInterfaces();
       setListenerState(ListenerStateEnum.Processing);
-      lastTranscript = transcript; // TODO: use state instead of global variable
+      setLastTranscript(transcript);
       setTranscript("");
       GenieInterpreter.nlParser.parse(lastTranscript).then(function (result) {
         console.log(`parsed result: ${result}`);
@@ -318,38 +318,38 @@ export const ModalityProvider = (props: {
           )}
         </div>
       )}
-        <div
-          style={{
-            position: "fixed",
-            bottom: "50px",
-            right: "10px",
-            zIndex: 4,
+      <div
+        style={{
+          position: "fixed",
+          bottom: "50px",
+          right: "10px",
+          zIndex: 4,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            if (listenerState === ListenerStateEnum.Idle) {
+              setListenerState(ListenerStateEnum.Listening);
+            }
           }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              if (listenerState === ListenerStateEnum.Idle) {
-                setListenerState(ListenerStateEnum.Listening);
-              }
+          <View
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              backgroundColor:
+                listenerState === ListenerStateEnum.Listening
+                  ? "#0000ff"
+                  : "#cccccc",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                backgroundColor:
-                  listenerState === ListenerStateEnum.Listening
-                    ? "#0000ff"
-                    : "#cccccc",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Icon name="microphone" size={30} color="#ffffff" />
-            </View>
-          </TouchableOpacity>
-        </div>
+            <Icon name="microphone" size={30} color="#ffffff" />
+          </View>
+        </TouchableOpacity>
+      </div>
       <SpeechRecognizer
         speechStatusCallback={speechStatusCallback}
         speechResultCallback={speechResultCallback}
