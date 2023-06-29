@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   NavigationContainer,
   StackActions,
@@ -30,7 +30,6 @@ import {
 import {
   displayResult,
   executeGenieCode,
-  genieCommandSuccess,
   NavigatorState,
 } from "./shared-store";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
@@ -92,10 +91,6 @@ export const ModalityProvider = (props: {
     return state.navStack;
   });
 
-  const recentVoiceCommand = useSelector((state: any) => {
-    return state.command;
-  });
-
   const voiceMessage = useSelector((state: any) => {
     return state.message;
   });
@@ -132,7 +127,6 @@ export const ModalityProvider = (props: {
 
   //create ref to NavigationContainer with type
   const navigationRef = useNavigationContainerRef();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("nav state changed", navState);
@@ -219,49 +213,27 @@ export const ModalityProvider = (props: {
     }
   };
 
-  const [lastTranscript, setLastTranscript] = useState("");
+  let lastTranscript = "";
 
   useEffect(() => {
     if (transcript !== "" && listenerState === ListenerStateEnum.Listening) {
+      lastTranscript = transcript;
       RetrieveInterfaces();
       setListenerState(ListenerStateEnum.Processing);
-      setLastTranscript(transcript);
       setTranscript("");
-      GenieInterpreter.nlParser.parse(lastTranscript).then(function (result) {
+      GenieInterpreter.nlParser.parse(lastTranscript).then((result) => {
         console.log(`parsed result: ${result}`);
         setInterimTranscript("");
         setListenerState(ListenerStateEnum.Idle);
-        let executionResult = executeGenieCode(result);
-        if (genieCommandSuccess) {
-          // TODO show black box
-          // GenieInterpreter.nlParser.respond(transcript, result, executionResult.last()).then(function (result) {
-          displayResult(executionResult);
+        const executionResult = executeGenieCode(result);
+
+        if (executionResult.success) {
+          displayResult(executionResult, lastTranscript, result);
         }
         ClickPoints.splice(0, ClickPoints.length);
       });
     }
   }, [transcript]);
-
-  useEffect(() => {
-    if (
-      recentVoiceCommand !== null &&
-      recentVoiceCommand !== undefined &&
-      recentVoiceCommand.command !== ""
-    ) {
-      GenieInterpreter.nlParser
-        .respond(
-          lastTranscript,
-          recentVoiceCommand.command,
-          recentVoiceCommand.result
-        )
-        .then(function (result) {
-          console.log(`respond result: ${result}`);
-          if (result !== null) {
-            dispatch({ type: "genie/response", payload: result });
-          }
-        });
-    }
-  }, [recentVoiceCommand]);
 
   // @ts-ignore
   return (

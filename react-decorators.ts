@@ -200,10 +200,6 @@ export function initReactGenie() {
       objectConstructorParams: null,
     };
     reactGenieState.navStack = 0;
-    reactGenieState.command = {
-      command: "",
-      result: "",
-    };
     reactGenieState.message = {
       message: "",
       type: "info",

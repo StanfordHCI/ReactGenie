@@ -43,6 +43,7 @@ export const SpeechRecognizer = (props: {
 
   useEffect(() => {
     if (finalTranscript != "") {
+      // the speech recognition is ended
       props.speechResultCallback(finalTranscript);
       resetTranscript();
       SpeechRecognition.stopListening();

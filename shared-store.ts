@@ -13,10 +13,6 @@ export type ReactGenieState = {
     message: string;
     type: string;
   };
-  command: {
-    command: string;
-    result: any;
-  };
   navState: NavigatorState;
   navStack: number;
 };
@@ -48,63 +44,70 @@ export const useGenieSelector = (selector: any) => {
   });
 };
 
-export let genieCommandSuccess = true;
+type GenieCodeResult = {
+  success: boolean;
+  results: [{ ast: any; result: any }];
+};
 
-type GenieCodeResult = [{ result }];
+function jsonifyResult(result: any) {
+  let resultStr;
+  if (result.type === "object") {
+    if (
+      result.objectType === "string" ||
+      result.objectType === "int" ||
+      result.objectType === "boolean"
+    ) {
+      resultStr = { value: result.value };
+    } else if (result.objectType === "void") {
+      resultStr = { result: "done" };
+    } else {
+      resultStr = result.value.description();
+    }
+  } else if (result.type === "array") {
+    resultStr = result.value.map((element) => jsonifyResult(element));
+  }
+  return resultStr;
+}
 
-export function executeGenieCode(command: string): GenieCodeResult | null {
+function stringifyResult(result: any) {
+  return JSON.stringify(jsonifyResult(result));
+}
+
+export function executeGenieCode(command: string): GenieCodeResult {
   return genieDispatch(() => {
-    console.log(`before executing state ${JSON.stringify(sharedState)}`);
+    console.log(`before executing ${JSON.stringify(sharedState)}`);
     try {
-      let result = GenieInterpreter.dslInterpreter.interpretSteps(command);
-      let resultStr = "";
-      if (result.length > 0) {
-        let lastResult = result[result.length - 1];
-        if (lastResult.result.type === "object") {
-          if (
-            lastResult.result.objectType === "string" ||
-            lastResult.result.objectType === "int" ||
-            lastResult.result.objectType === "boolean"
-          ) {
-            resultStr = JSON.stringify({ value: lastResult.result.value });
-          } else if (lastResult.result.objectType === "void") {
-            resultStr = '{"result": "done"}';
-          } else {
-            resultStr = JSON.stringify(lastResult.result.value.description());
-          }
-        } else if (lastResult.result.type === "array") {
-          resultStr = JSON.stringify(
-            lastResult.result.value.map((element) =>
-              element.value.description()
-            )
-          );
-        }
-      }
-      let reactGenieState = sharedState as ReactGenieState;
-      reactGenieState.command = {
-        command: command,
-        result: resultStr,
+      const result = GenieInterpreter.dslInterpreter.interpretSteps(command);
+      return {
+        success: true,
+        results: result,
       };
-      genieCommandSuccess = true;
-      return result;
     } catch (e) {
-      let reactGenieState = sharedState as ReactGenieState;
+      const reactGenieState = sharedState as ReactGenieState;
       reactGenieState.message = {
         message: "Sorry, I don't understand...",
         type: "error",
       };
-      genieCommandSuccess = false;
+      return {
+        success: false,
+        results: [e],
+      };
     }
-    return null;
   });
 }
 
-export function displayResult(result: GenieCodeResult) {
+export function displayResult(
+  executionResult: GenieCodeResult,
+  transcript: string,
+  parsed: string
+) {
   genieDispatch(() => {
     const genieInterfaces = RetrieveInterfaces();
     let allDisplayingObjects = [];
     let displayingObject = null;
     let displayingObjectType = "";
+
+    const result = executionResult.results;
     let lastResult = true;
 
     for (let i = result.length - 1; i >= 0; i--) {
@@ -175,24 +178,45 @@ export function displayResult(result: GenieCodeResult) {
         instantiatedDisplayingObject = Instance;
       }
     }
-    if (!onScreen) {
-      let reactGenieState = sharedState as ReactGenieState;
-      reactGenieState.navState = {
-        objectViewClassName: AllGenieObjectInterfaces.getInterfaces(
-          instantiatedDisplayingObject
-        ).viewClassName,
-        objectConstructorParams:
-          allDisplayingObjects.length === 1
-            ? allDisplayingObjects[0].value._getConstructorParams()
-            : {
-                elements: allDisplayingObjects.map((displayingObject) =>
-                  displayingObject.value._getConstructorParams()
-                ),
-              },
-      };
-      reactGenieState.navStack += 1;
-    }
+    GenieInterpreter.nlParser
+      .respond(
+        transcript,
+        parsed,
+        stringifyResult(
+          // now we only display the last result
+          executionResult.results[executionResult.results.length - 1].result
+        )
+      )
+      .then((result) => {
+        console.log(`respond result: ${result}`);
+        genieDispatch(() => {
+          if (result !== null) {
+            const reactGenieState = sharedState as ReactGenieState;
+            reactGenieState.message = {
+              message: result,
+              type: "info",
+            };
+          }
+          if (!onScreen) {
+            const reactGenieState = sharedState as ReactGenieState;
+            reactGenieState.navState = {
+              objectViewClassName: AllGenieObjectInterfaces.getInterfaces(
+                instantiatedDisplayingObject
+              ).viewClassName,
+              objectConstructorParams:
+                allDisplayingObjects.length === 1
+                  ? allDisplayingObjects[0].value._getConstructorParams()
+                  : {
+                      elements: allDisplayingObjects.map((displayingObject) =>
+                        displayingObject.value._getConstructorParams()
+                      ),
+                    },
+            };
+            reactGenieState.navStack += 1;
+          }
+        });
+      });
 
-    console.log(`after executing state ${JSON.stringify(sharedState)}`);
+    console.log(`after executing ${JSON.stringify(sharedState)}`);
   });
 }
