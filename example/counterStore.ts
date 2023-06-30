@@ -1,4 +1,3 @@
-import ENV from "./config";
 import { Counter } from "./genie/counter";
 import { initReactGenie } from "reactgenie-lib";
 
