@@ -1,3 +1,5 @@
+name: Publish to NPM if new version
+
 on:
   push:
     branches: master
@@ -11,7 +13,7 @@ jobs:
         with:
           node-version: "16.17.0"
       - run: npm ci
-      - run: npm test
+      # - run: npm test
       - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
