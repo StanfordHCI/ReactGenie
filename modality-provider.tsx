@@ -50,8 +50,8 @@ const DefaultScreen =
 const ObjectInterfaceScreen =
   (genieInterfaceStoreElement: GenieInterfaceStoreElement) =>
   ({ route, navigation }) => {
-    let title: string;
-    title = genieInterfaceStoreElement.title(route.params);
+    // FIXME
+    const title = genieInterfaceStoreElement.title(route.params);
     useEffect(() => {
       navigation.setOptions({ headerShown: true });
       navigation.setOptions({ title: title });
@@ -235,7 +235,6 @@ export const ModalityProvider = (props: {
     }
   }, [transcript]);
 
-  // @ts-ignore
   return (
     <View style={{ flex: 1 }}>
       {(listenerState === ListenerStateEnum.Listening ||

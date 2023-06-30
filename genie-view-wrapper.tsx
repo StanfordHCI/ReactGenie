@@ -27,17 +27,9 @@ export const GenieViewWrapper =
         `GenieViewWrapper: ${className} ${interfaceId} ${entry.isIntersecting}`
       );
       if (entry.isIntersecting) {
-        // check if self interfaceId is in the dictionary, if it is update it, if it isn't add it.
+        // check if interfaceId is in the dictionary. If it is update it, if it isn't add it.
         const queryInterfaceSpec = () => {
           // @ts-ignore
-          // const cssStyle = window.getComputedStyle(containerRef.current)
-          // // convert cssStyle from string ("100.0px") to number (100.0)
-          // const rect = {
-          //     x: parseFloat(cssStyle.left),
-          //     y: parseFloat(cssStyle.top),
-          //     width: parseFloat(cssStyle.width),
-          //     height: parseFloat(cssStyle.height)
-          // }
           const rect = containerRef.current.getBoundingClientRect();
           return {
             className: className,
