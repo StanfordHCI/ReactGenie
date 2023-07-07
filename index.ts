@@ -12,6 +12,10 @@ export {
   float,
   DataClass,
   HelperClass,
+  ClassDescriptor, 
+  FieldDescriptor, 
+  FuncDescriptor, 
+  ParamDescriptor
 } from "./react-decorators";
 export { genieDispatch, sharedStore, sharedState } from "reactgenie-dsl";
 export { default as ReactFromModule } from "react";

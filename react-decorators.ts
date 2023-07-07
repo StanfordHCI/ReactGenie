@@ -18,6 +18,9 @@ import {
   HelperClass,
   int,
   float,
+  ClassDescriptor,
+  FieldDescriptor,
+  ParamDescriptor,
 } from "reactgenie-dsl";
 
 export {
@@ -29,6 +32,10 @@ export {
   HelperClass,
   int,
   float,
+  ClassDescriptor,
+  FieldDescriptor,
+  FuncDescriptor,
+  ParamDescriptor,
 } from "reactgenie-dsl";
 import React from "react";
 import { ReactGenieState } from "./shared-store";
