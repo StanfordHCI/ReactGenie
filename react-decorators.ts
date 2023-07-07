@@ -5,8 +5,8 @@ import {
   GenieClassModifier,
   GenieObject,
   initGenie,
-  AllGenieObjects,
   genieDispatch,
+  AllGenieObjects,
   sharedState,
 } from "reactgenie-dsl";
 import {
@@ -71,7 +71,7 @@ class GenieInterfacesStore {
   }
 
   getInterfaces(object: GenieObject): GenieInterfaceStoreElement {
-    let className = this.getObjectClassName(object);
+    const className = this.getObjectClassName(object);
     if (this.interfaces[className]) {
       const sortedInterfaces = this.interfaces[className].sort((a, b) => {
         return b.displayPriority(object) - a.displayPriority(object);
@@ -100,7 +100,7 @@ export const AllGenieDisplayedInstances: {
   [key: string]: () => GenieInterfaceSpec;
 } = {};
 
-export var ClickPoints: { x: number; y: number }[] = [];
+export const ClickPoints: { x: number; y: number }[] = [];
 
 interface GenieObjectSpec {
   className: string;
@@ -139,7 +139,7 @@ export function RetrieveInterfaces(): GenieInterfaceSpec[] {
   return displayedInstances;
 }
 
-let reactGenieClassModifier: GenieClassModifier = (target: any) => {
+const reactGenieClassModifier: GenieClassModifier = (target: any) => {
   console.log("ReactGenie Class modifier called on " + target.name);
 
   // append method `current()` to the class
@@ -148,8 +148,8 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
    * @returns {any} the GenieObject
    */
   function Current() {
-    let currentClassName = target.ClassDescriptor.className;
-    let genieInterfaces = RetrieveInterfaces();
+    const currentClassName = target.ClassDescriptor.className;
+    const genieInterfaces = RetrieveInterfaces();
 
     if (ClickPoints.length > 0) {
       // find the genie object that is closest to the click point
@@ -160,7 +160,7 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
       );
       for (let i = 1; i < genieInterfaces.length; i++) {
         if (genieInterfaces[i].className !== currentClassName) continue;
-        let distance = Math.sqrt(
+        const distance = Math.sqrt(
           Math.pow(ClickPoints[0].x - genieInterfaces[i].rect.x, 2) +
             Math.pow(ClickPoints[0].y - genieInterfaces[i].rect.y, 2)
         );
@@ -177,7 +177,7 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
 
       for (const genieInterface of genieInterfaces) {
         if (genieInterface.className !== currentClassName) continue;
-        let area = genieInterface.rect.width * genieInterface.rect.height;
+        const area = genieInterface.rect.width * genieInterface.rect.height;
         console.log();
         if (area > biggestArea) {
           result = genieInterface;
@@ -197,11 +197,11 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
 };
 
 export function initReactGenie() {
-  let reactGenieStore = initGenie({
+  const reactGenieStore = initGenie({
     initGenieClassModifier: reactGenieClassModifier,
   });
   genieDispatch(() => {
-    let reactGenieState = sharedState as ReactGenieState;
+    const reactGenieState = sharedState as ReactGenieState;
     reactGenieState.navState = {
       objectViewClassName: null,
       objectConstructorParams: null,

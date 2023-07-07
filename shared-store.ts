@@ -75,7 +75,7 @@ function stringifyResult(result: any) {
 
 export function executeGenieCode(command: string): GenieCodeResult {
   return genieDispatch(() => {
-    console.log(`before executing ${JSON.stringify(sharedState)}`);
+    console.log(`before executing state ${JSON.stringify(sharedState)}`);
     try {
       const result = GenieInterpreter.dslInterpreter.interpretSteps(command);
       return {
@@ -217,6 +217,6 @@ export function displayResult(
         });
       });
 
-    console.log(`after executing ${JSON.stringify(sharedState)}`);
+    console.log(`after executing state ${JSON.stringify(sharedState)}`);
   });
 }

@@ -50,8 +50,7 @@ const DefaultScreen =
 const ObjectInterfaceScreen =
   (genieInterfaceStoreElement: GenieInterfaceStoreElement) =>
   ({ route, navigation }) => {
-    let title: string;
-    title = genieInterfaceStoreElement.title(route.params);
+    const title = genieInterfaceStoreElement.title(route.params);
     useEffect(() => {
       navigation.setOptions({ headerShown: true });
       navigation.setOptions({ title: title });
@@ -175,12 +174,14 @@ export const ModalityProvider = (props: {
   );
 
   const [listenerState, setListenerState] = useState(ListenerStateEnum.Idle);
+  const [shouldListen, setShouldListen] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
   const [mouseDown, setMouseDown] = useState(false);
 
   useEffect(() => {
     console.log("listener state changed", listenerState);
+    setShouldListen(listenerState === ListenerStateEnum.Listening);
   }, [listenerState]);
 
   const handleClick = (event) => {
@@ -235,7 +236,6 @@ export const ModalityProvider = (props: {
     }
   }, [transcript]);
 
-  // @ts-ignore
   return (
     <View style={{ flex: 1 }}>
       {(listenerState === ListenerStateEnum.Listening ||
@@ -302,6 +302,8 @@ export const ModalityProvider = (props: {
           onPress={() => {
             if (listenerState === ListenerStateEnum.Idle) {
               setListenerState(ListenerStateEnum.Listening);
+            } else if (listenerState === ListenerStateEnum.Listening) {
+              setShouldListen(false);
             }
           }}
         >
@@ -325,7 +327,7 @@ export const ModalityProvider = (props: {
       <SpeechRecognizer
         speechStatusCallback={speechStatusCallback}
         speechResultCallback={speechResultCallback}
-        shouldListen={listenerState === ListenerStateEnum.Listening}
+        shouldListen={shouldListen}
         azureSpeechRegion={props.azureSpeechRegion}
         azureSpeechKey={props.azureSpeechKey}
       />
