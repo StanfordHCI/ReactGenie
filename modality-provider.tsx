@@ -50,7 +50,6 @@ const DefaultScreen =
 const ObjectInterfaceScreen =
   (genieInterfaceStoreElement: GenieInterfaceStoreElement) =>
   ({ route, navigation }) => {
-    // FIXME
     const title = genieInterfaceStoreElement.title(route.params);
     useEffect(() => {
       navigation.setOptions({ headerShown: true });

@@ -93,7 +93,7 @@ export const AllGenieDisplayedInstances: {
   [key: string]: () => GenieInterfaceSpec;
 } = {};
 
-export var ClickPoints: { x: number; y: number }[] = [];
+export const ClickPoints: { x: number; y: number }[] = [];
 
 interface GenieObjectSpec {
   className: string;
