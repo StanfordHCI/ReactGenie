@@ -1,45 +1,45 @@
 {
-  "name": "reactgenie-lib",
-  "version": "1.1.1",
-  "description": "A Toolkit for Multimodal Applications",
-  "author": "valkjsaaa",
-  "license": "Apache-2.0",
-  "repository": "StanfordHCI/reactgenie",
-  "keywords": [],
-  "devDependencies": {
-    "@types/react-native": "^0.69.5",
-    "@types/react-speech-recognition": "^3.9.0",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
-    "eslint": "^8.43.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "expo-yarn-workspaces": "^1.2.1",
-    "prettier": "2.8.8"
-  },
-  "workspaces": [
-    "example"
-  ],
-  "dependencies": {
-    "@babel/core": "^7.18.13",
-    "@expo/vector-icons": "^13.0.0",
-    "@react-native-material/core": "^1.3.7",
-    "@react-navigation/stack": "^6.3.16",
-    "@reduxjs/toolkit": "^1.8.5",
-    "react-native-elements": "^3.4.3",
-    "react-native-root-toast": "^3.4.1",
-    "react-speech-recognition": "^3.9.1",
-    "reactgenie-dsl": "^0.0.8",
-    "reflect-metadata": "^0.1.13",
-    "web-speech-cognitive-services": "^7.1.3"
-  },
-  "peerDependencies": {
-    "@react-navigation/native": "^6.0.0",
-    "@react-navigation/native-stack": "^6.9.9",
-    "react": "^18.0.0",
-    "react-dom": "18.0.0",
-    "react-native": "^0.69.9",
-    "react-redux": "^8.0.5",
-    "redux": "^4.2.0"
-  }
+    "name": "reactgenie-lib",
+    "version": "1.1.1",
+    "description": "A Toolkit for Multimodal Applications",
+    "author": "valkjsaaa",
+    "license": "Apache-2.0",
+    "repository": "StanfordHCI/reactgenie",
+    "keywords": [],
+    "devDependencies": {
+        "@types/react-native": "^0.69.5",
+        "@types/react-speech-recognition": "^3.9.0",
+        "@typescript-eslint/eslint-plugin": "^5.60.1",
+        "@typescript-eslint/parser": "^5.60.1",
+        "eslint": "^8.43.0",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "expo-yarn-workspaces": "^1.2.1",
+        "prettier": "2.8.8"
+    },
+    "workspaces": [
+        "example"
+    ],
+    "dependencies": {
+        "@babel/core": "^7.18.13",
+        "@expo/vector-icons": "^13.0.0",
+        "@react-native-material/core": "^1.3.7",
+        "@react-navigation/stack": "^6.3.16",
+        "@reduxjs/toolkit": "^1.8.5",
+        "react-native-elements": "^3.4.3",
+        "react-native-root-toast": "^3.4.1",
+        "react-speech-recognition": "^3.9.1",
+        "reactgenie-dsl": "^0.0.8",
+        "reflect-metadata": "^0.1.13",
+        "web-speech-cognitive-services": "^7.1.3"
+    },
+    "peerDependencies": {
+        "@react-navigation/native": "^6.0.0",
+        "@react-navigation/native-stack": "^6.9.9",
+        "react": "^18.0.0",
+        "react-dom": "18.0.0",
+        "react-native": "^0.69.9",
+        "react-redux": "^8.0.5",
+        "redux": "^4.2.0"
+    }
 }
