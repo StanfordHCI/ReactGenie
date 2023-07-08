@@ -155,14 +155,14 @@ let reactGenieClassModifier: GenieClassModifier = (target: any) => {
       // find the genie object that is closest to the click point
       let closest = genieInterfaces[0];
       let closestDistance = Math.sqrt(
-        Math.pow(ClickPoints[0].x - closest.rect.x, 2) +
-          Math.pow(ClickPoints[0].y - closest.rect.y, 2)
+        Math.pow(ClickPoints[0].x - (closest.rect.x + closest.rect.width/2), 2) +
+          Math.pow(ClickPoints[0].y - (closest.rect.y + closest.rect.height/2), 2)
       );
       for (let i = 1; i < genieInterfaces.length; i++) {
         if (genieInterfaces[i].className !== currentClassName) continue;
         let distance = Math.sqrt(
-          Math.pow(ClickPoints[0].x - genieInterfaces[i].rect.x, 2) +
-            Math.pow(ClickPoints[0].y - genieInterfaces[i].rect.y, 2)
+          Math.pow(ClickPoints[0].x - (genieInterfaces[i].rect.x + genieInterfaces[i].rect.width/2), 2) +
+            Math.pow(ClickPoints[0].y - (genieInterfaces[i].rect.y + genieInterfaces[i].rect.height/2), 2)
         );
         if (distance < closestDistance) {
           closest = genieInterfaces[i];
