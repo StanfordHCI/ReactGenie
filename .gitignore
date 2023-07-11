@@ -259,3 +259,7 @@ n
 
 # Custom
 .expo
+
+
+#Mac file
+.DS_store
