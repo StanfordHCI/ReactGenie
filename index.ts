@@ -12,11 +12,13 @@ export {
   float,
   DataClass,
   HelperClass,
-  ClassDescriptor, 
-  FieldDescriptor, 
-  FuncDescriptor, 
-  ParamDescriptor
+  ClassDescriptor,
+  FieldDescriptor,
+  FuncDescriptor,
+  ParamDescriptor,
 } from "./react-decorators";
 export { genieDispatch, sharedStore, sharedState } from "reactgenie-dsl";
 export { default as ReactFromModule } from "react";
 export { default as ReactReduxFromModule } from "react-redux";
+export { DateTime } from "./genie/DateTime";
+export { TimeDelta } from "./genie/TimeDelta";
