@@ -226,10 +226,16 @@ export const ModalityProvider = (props: {
         console.log(`parsed result: ${result}`);
         setInterimTranscript("");
         setListenerState(ListenerStateEnum.Idle);
+        const genieInterfaces = RetrieveInterfaces();
         const executionResult = executeGenieCode(result);
 
         if (executionResult.success) {
-          displayResult(executionResult, lastTranscript, result);
+          displayResult(
+            executionResult,
+            lastTranscript,
+            result,
+            genieInterfaces
+          );
         }
         ClickPoints.splice(0, ClickPoints.length);
       });

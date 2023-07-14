@@ -1,6 +1,7 @@
 import { GenieInterpreter } from "./modality-provider";
 import {
   AllGenieObjectInterfaces,
+  GenieInterfaceSpec,
   InstantiateGenieObject,
   RetrieveInterfaces,
 } from "./react-decorators";
@@ -99,10 +100,10 @@ export function executeGenieCode(command: string): GenieCodeResult {
 export function displayResult(
   executionResult: GenieCodeResult,
   transcript: string,
-  parsed: string
+  parsed: string,
+  genieInterfaces: GenieInterfaceSpec[]
 ) {
   genieDispatch(() => {
-    const genieInterfaces = RetrieveInterfaces();
     let allDisplayingObjects = [];
     let displayingObject = null;
     let displayingObjectType = "";
@@ -141,6 +142,7 @@ export function displayResult(
         break;
       }
     }
+    let cannotdisplay = false;
     let onScreen = true;
     let instantiatedDisplayingObject = null;
     if (displayingObject != null) {
@@ -154,6 +156,10 @@ export function displayResult(
             className: element.objectType,
             key: element.value,
           });
+          if (Instance === undefined) {
+            cannotdisplay = true;
+            break;
+          }
           instantiatedDisplayingObject.push(Instance);
         }
       } else {
@@ -161,21 +167,28 @@ export function displayResult(
           className: displayingObject.objectType,
           key: displayingObject.value,
         });
-        if (lastResult) {
-          // always display
-          onScreen = false;
-        } else {
-          // check if displayingObjects is on screen already
-          const targetInterface = genieInterfaces.find(
-            (genieInterface) =>
-              genieInterface.className === Instance.constructor.name &&
-              shallowEqual(genieInterface.key, Instance._getConstructorParams())
-          );
-          if (!targetInterface) {
+        if (Instance === undefined) cannotdisplay = true;
+        else {
+          if (lastResult) {
+            // always display
             onScreen = false;
+          } else {
+            // check if displayingObjects is on screen already
+            const targetInterface = genieInterfaces.find(
+              (genieInterface) =>
+                genieInterface.className === Instance.constructor.name &&
+                shallowEqual(
+                  genieInterface.key,
+                  Instance._getConstructorParams()
+                )
+            );
+            if (!targetInterface) {
+              onScreen = false;
+            }
           }
+
+          instantiatedDisplayingObject = Instance;
         }
-        instantiatedDisplayingObject = Instance;
       }
     }
     GenieInterpreter.nlParser
@@ -197,7 +210,7 @@ export function displayResult(
               type: "info",
             };
           }
-          if (!onScreen) {
+          if (!onScreen && !cannotdisplay) {
             const reactGenieState = sharedState as ReactGenieState;
             reactGenieState.navState = {
               objectViewClassName: AllGenieObjectInterfaces.getInterfaces(
