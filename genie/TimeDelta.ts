@@ -61,13 +61,29 @@ export class TimeDelta extends HelperClass {
     minute = 0,
     second = 0,
   }: {
-    hour: number;
-    minute: number;
-    second: number;
+    hour?: number;
+    minute?: number;
+    second?: number;
   }): TimeDelta {
     this.hour = this.hour + hour;
     this.minute = this.minute + minute;
     this.second = this.second + second;
+    return this;
+  }
+
+  @GenieFunction("Set the value to the time")
+  setTime({
+    hour = 0,
+    minute = 0,
+    second = 0,
+  }: {
+    hour?: number;
+    minute?: number;
+    second?: number;
+  }): TimeDelta {
+    this.hour = hour;
+    this.minute = minute;
+    this.second = second;
     return this;
   }
 

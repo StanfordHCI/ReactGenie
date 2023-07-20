@@ -113,7 +113,7 @@ export class DateTime extends HelperClass {
 
 
     toString() {
-        return `${this.year}-${this.month}-${this.day} ${this.hour}:${this.minute}:${this.second}`;
+        return `${this.year}-${this.month}-${this.day}`;
     }
 }
 
