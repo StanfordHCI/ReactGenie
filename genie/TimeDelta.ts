@@ -65,9 +65,17 @@ export class TimeDelta extends HelperClass {
     minute?: number;
     second?: number;
   }): TimeDelta {
-    this.hour = this.hour + hour;
-    this.minute = this.minute + minute;
-    this.second = this.second + second;
+    const offsettime =
+      this.getLeftSecond() + hour * 3600 + minute * 60 + second;
+    if (offsettime < 0) {
+      this.hour = 0;
+      this.minute = 0;
+      this.second = 0;
+      return this;
+    }
+    this.hour = Math.floor(offsettime / 3600);
+    this.minute = Math.floor((offsettime % 3600) / 60);
+    this.second = offsettime % 60;
     return this;
   }
 
