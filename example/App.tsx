@@ -8,7 +8,6 @@ import {
   ReactFromModule,
   ReactReduxFromModule,
 } from "reactgenie-lib";
-import { CounterExamples } from "./genie/counter";
 import { CounterListView } from "./CounterListView";
 import { CounterAltView } from "./CounterAltView";
 import ENV from "./config";
@@ -23,7 +22,6 @@ const App = () => {
   return (
     <Provider store={reactGenieStore}>
       <ModalityProvider
-        examples={CounterExamples}
         displayTranscript={true}
         codexApiKey={ENV.OPENAI_API_KEY!}
         codexApiBaseUrl={ENV.OPENAI_API_BASE_URL!}

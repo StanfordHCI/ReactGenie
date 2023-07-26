@@ -19,6 +19,7 @@ import {
   ClassDescriptor,
   ExampleParse,
   GenieObject,
+  sharedState,
 } from "reactgenie-dsl";
 import {
   AllGenieObjectInterfaces,
@@ -31,6 +32,7 @@ import {
   displayResult,
   executeGenieCode,
   NavigatorState,
+  useGenieSelector,
 } from "./shared-store";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -73,7 +75,7 @@ export const enum ListenerStateEnum {
 }
 
 export const ModalityProvider = (props: {
-  examples: ExampleParse[];
+  examples?: ExampleParse[];
   codexApiKey: string;
   codexApiBaseUrl: string;
   azureSpeechRegion: string;
@@ -82,6 +84,14 @@ export const ModalityProvider = (props: {
   extraPrompt: string;
   children: React.ReactElement[] | React.ReactElement;
 }) => {
+  const examples = useGenieSelector(() => {
+    if (props.examples === undefined) {
+      return sharedState["__EXAMPLES__"];
+    } else {
+      return props.examples.concat(sharedState["__EXAMPLES__"]);
+    }
+  });
+
   const navState: NavigatorState = useSelector((state: any) => {
     return state.navState;
   });
@@ -118,11 +128,11 @@ export const ModalityProvider = (props: {
       descriptors,
       props.codexApiKey,
       undefined,
-      props.examples,
+      examples,
       props.extraPrompt,
       props.codexApiBaseUrl
     );
-  }, [props.codexApiKey, props.examples]);
+  }, [props.codexApiKey, examples]);
 
   //create ref to NavigationContainer with type
   const navigationRef = useNavigationContainerRef();

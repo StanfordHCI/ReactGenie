@@ -8,6 +8,8 @@ import {
   genieDispatch,
   AllGenieObjects,
   sharedState,
+  sharedStore,
+  setSharedState,
 } from "reactgenie-dsl";
 import {
   GenieClass,
@@ -138,7 +140,9 @@ export function RetrieveInterfaces(): GenieInterfaceSpec[] {
   return displayedInstances;
 }
 
-const reactGenieClassModifier: GenieClassModifier = (target: any) => {
+const reactGenieClassModifier: GenieClassModifier = (
+  target: typeof GenieObject
+) => {
   console.log("ReactGenie Class modifier called on " + target.name);
 
   // append method `current()` to the class
@@ -202,12 +206,22 @@ const reactGenieClassModifier: GenieClassModifier = (target: any) => {
     }
   }
 
+  // @ts-ignore
   target.Current = Current;
 
   // append additional function descriptor to class descriptor
   target.ClassDescriptor.functions.add(
     new FuncDescriptor("Current", [], target.ClassDescriptor.className, true)
   );
+
+  genieDispatch(() => {
+    let newExamples = sharedState["__EXAMPLES__"] || [];
+    newExamples = newExamples.concat(target.Examples);
+    setSharedState({
+      ...sharedState,
+      ["__EXAMPLES__"]: newExamples,
+    });
+  });
 };
 
 export function initReactGenie() {

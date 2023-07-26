@@ -19,20 +19,11 @@ export class Counter extends DataClass {
   @GenieProperty()
   public count: int;
 
-
-  constructor({
-    name,
-    counterType,
-  }: {
-    name: string;
-    counterType: string;
-  }) {
+  constructor({ name, counterType }: { name: string; counterType: string }) {
     super({ name: name });
     this.count = 0;
     this.name = name.toLowerCase();
     this.type = counterType.toLowerCase();
-
- 
   }
 
   @GenieProperty()
@@ -41,11 +32,11 @@ export class Counter extends DataClass {
   static setup() {
     Counter.CreateObject({
       name: "coin",
-      counterType: "coin"
+      counterType: "coin",
     });
     Counter.CreateObject({
       name: "tomato",
-      counterType: "vegetable"
+      counterType: "vegetable",
     });
     Counter.CreateObject({ name: "potato", counterType: "vegetable" });
     Counter.CreateObject({ name: "apple", counterType: "fruit" });
@@ -58,8 +49,8 @@ export class Counter extends DataClass {
     Counter.CreateObject({ name: "watermelon", counterType: "fruit" });
   }
   @GenieFunction()
-  static GetCounter({name = ""}: {name?: string}): Counter {
-      return Counter.GetObject({name: name});
+  static GetCounter({ name = "" }: { name?: string }): Counter {
+    return Counter.GetObject({ name: name });
   }
 
   @GenieFunction()
@@ -72,32 +63,33 @@ export class Counter extends DataClass {
     this.count -= 1;
   }
 
-  description(): {} {
+  description(): object {
     return {
       count: this.count,
     };
   }
-}
 
-export const CounterExamples = [
-  {
-    user_utterance: "increment",
-    example_parsed: "Counter.Current().increment()",
-  },
-  {
-    user_utterance: "what is the count",
-    example_parsed: "Counter.Current().count",
-  },
-  {
-    user_utterance: "what is the count of potato",
-    example_parsed: 'Counter.GetCounter(name: "potato").count',
-  },
-  {
-    user_utterance: "increment potato counter",
-    example_parsed: 'Counter.GetCounter(name: "potato").increment()',
-  },
-  {
-    user_utterance: "show me all vegetables counters",
-    example_parsed: 'Counter.All().matching(field: .type, value: "vegetable")',
-  },
-];
+  static Examples = [
+    {
+      user_utterance: "increment",
+      example_parsed: "Counter.Current().increment()",
+    },
+    {
+      user_utterance: "what is the count",
+      example_parsed: "Counter.Current().count",
+    },
+    {
+      user_utterance: "what is the count of potato",
+      example_parsed: 'Counter.GetCounter(name: "potato").count',
+    },
+    {
+      user_utterance: "increment potato counter",
+      example_parsed: 'Counter.GetCounter(name: "potato").increment()',
+    },
+    {
+      user_utterance: "show me all vegetables counters",
+      example_parsed:
+        'Counter.All().matching(field: .type, value: "vegetable")',
+    },
+  ];
+}

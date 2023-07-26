@@ -1,6 +1,6 @@
 {
     "name": "reactgenie-lib",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "description": "A Toolkit for Multimodal Applications",
     "author": "valkjsaaa",
     "license": "Apache-2.0",
@@ -29,7 +29,7 @@
         "react-native-elements": "^3.4.3",
         "react-native-root-toast": "^3.4.1",
         "react-speech-recognition": "^3.9.1",
-        "reactgenie-dsl": "0.0.16",
+        "reactgenie-dsl": "0.0.19",
         "reflect-metadata": "^0.1.13",
         "web-speech-cognitive-services": "^7.1.3"
     },
