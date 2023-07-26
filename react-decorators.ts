@@ -243,9 +243,16 @@ export function initReactGenie() {
   return reactGenieStore;
 }
 
+/**
+ *
+ * @param type the type of the object being rendered by the interface
+ * @param displayTitle the title of the interface, can be a function that takes in the object and returns a string
+ * @param displayPriority the priority of the interface, can be a function that takes in the object and returns a number
+ * @constructor
+ */
 export function GenieClassInterface(
-  title: string | ((any) => string),
   type: string,
+  displayTitle: string | ((any) => string) | undefined = undefined,
   displayPriority: number | ((target: any) => number) = 0
 ) {
   return function (target: any) {
@@ -254,7 +261,11 @@ export function GenieClassInterface(
     const newTarget = (...args) => {
       return GenieViewWrapper(type, target, args)();
     };
-    const titleFunction = typeof title === "string" ? () => title : title;
+    if (displayTitle === undefined) {
+      displayTitle = type;
+    }
+    const titleFunction =
+      typeof displayTitle === "string" ? () => displayTitle : displayTitle;
     const displayPriorityFunction =
       typeof displayPriority === "number"
         ? () => displayPriority
