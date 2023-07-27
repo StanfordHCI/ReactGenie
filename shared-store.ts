@@ -6,8 +6,9 @@ import {
   RetrieveInterfaces,
 } from "./react-decorators";
 import { shallowEqual, useSelector } from "react-redux";
-import { setSharedState } from "reactgenie-dsl";
+import { GenieObject, setSharedState } from "reactgenie-dsl";
 import { genieDispatch, sharedState } from "reactgenie-dsl";
+import { createSelectorHook } from "react-redux/src/hooks/useSelector";
 
 export type ReactGenieState = {
   message: {
@@ -39,10 +40,27 @@ export const useGenieCodeSelector = (command: string) => {
 };
 
 export const useGenieSelector = (selector: any) => {
-  return useSelector((state: any) => {
-    setSharedState(state);
-    return selector(state);
-  });
+  return useSelector(
+    (state: any) => {
+      setSharedState(state);
+      return selector(state);
+    },
+    (left: any, right: any) => {
+      let leftValue: any;
+      if (left.prototype instanceof GenieObject) {
+        leftValue = left.__getState();
+      } else {
+        leftValue = left;
+      }
+      let rightValue: any;
+      if (right.prototype instanceof GenieObject) {
+        rightValue = right.__getState();
+      } else {
+        rightValue = right;
+      }
+      return shallowEqual(leftValue, rightValue);
+    }
+  );
 };
 
 type GenieCodeResult = {
