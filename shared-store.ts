@@ -39,6 +39,16 @@ export const useGenieCodeSelector = (command: string) => {
   };
 };
 
+const convertToStateDict = (obj: any) => {
+  if (Array.isArray(obj)) {
+    return obj.map((element) => convertToStateDict(element));
+  } else if (obj.constructor.prototype instanceof GenieObject) {
+    return obj.__getState();
+  } else {
+    return obj;
+  }
+};
+
 export const useGenieSelector = (selector: any) => {
   return useSelector(
     (state: any) => {
@@ -46,19 +56,7 @@ export const useGenieSelector = (selector: any) => {
       return selector(state);
     },
     (left: any, right: any) => {
-      let leftValue: any;
-      if (left.prototype instanceof GenieObject) {
-        leftValue = left.__getState();
-      } else {
-        leftValue = left;
-      }
-      let rightValue: any;
-      if (right.prototype instanceof GenieObject) {
-        rightValue = right.__getState();
-      } else {
-        rightValue = right;
-      }
-      return shallowEqual(leftValue, rightValue);
+      return shallowEqual(convertToStateDict(left), convertToStateDict(right));
     }
   );
 };
