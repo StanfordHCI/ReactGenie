@@ -3,12 +3,15 @@ import {
   AllGenieObjectInterfaces,
   GenieInterfaceSpec,
   InstantiateGenieObject,
-  RetrieveInterfaces,
 } from "./react-decorators";
 import { shallowEqual, useSelector } from "react-redux";
-import { GenieObject, setSharedState } from "reactgenie-dsl";
+import {
+  DataClass,
+  GenieObject,
+  HelperClass,
+  setSharedState,
+} from "reactgenie-dsl";
 import { genieDispatch, sharedState } from "reactgenie-dsl";
-import { createSelectorHook } from "react-redux/src/hooks/useSelector";
 
 export type ReactGenieState = {
   message: {
@@ -39,26 +42,56 @@ export const useGenieCodeSelector = (command: string) => {
   };
 };
 
-const convertToStateDict = (obj: any) => {
+const shallowEqualWithArray = (left: any, right: any) => {
+  if (Array.isArray(left) && Array.isArray(right)) {
+    if (left.length !== right.length) {
+      return false;
+    }
+    for (let i = 0; i < left.length; i++) {
+      if (!shallowEqualWithArray(left[i], right[i])) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return shallowEqual(left, right);
+  }
+};
+
+const convertGenieClassToState = (obj: any) => {
   if (Array.isArray(obj)) {
-    return obj.map((element) => convertToStateDict(element));
+    return obj.map((element) => convertGenieClassToState(element));
+  } else if (obj === undefined || obj.constructor === undefined) {
+    return obj;
   } else if (obj.constructor.prototype instanceof GenieObject) {
-    return obj.__getState();
+    if (obj.constructor.prototype instanceof DataClass) {
+      return {
+        __genieObjectType: "DataClass",
+        __genieObjectClass: obj.constructor.name,
+        __genieObjectKey: obj[obj.genieKey],
+        ...obj.__getState(),
+      };
+    } else if (obj.constructor.prototype instanceof HelperClass) {
+      return {
+        __genieObjectType: "HelperClass",
+        __genieObjectClass: obj.constructor.name,
+        ...obj.localStore,
+      };
+    }
+    throw new Error("Unknown GenieObject type");
   } else {
     return obj;
   }
 };
 
 export const useGenieSelector = (selector: any) => {
-  return useSelector(
-    (state: any) => {
-      setSharedState(state);
-      return selector(state);
-    },
-    (left: any, right: any) => {
-      return shallowEqual(convertToStateDict(left), convertToStateDict(right));
-    }
-  );
+  let selectorResult: any = undefined;
+  useSelector((state: any) => {
+    setSharedState(state);
+    selectorResult = selector(state);
+    return convertGenieClassToState(selectorResult);
+  }, shallowEqualWithArray);
+  return selectorResult;
 };
 
 type GenieCodeResult = {
