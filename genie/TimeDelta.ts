@@ -64,19 +64,18 @@ export class TimeDelta extends HelperClass {
     hour?: number;
     minute?: number;
     second?: number;
-  }): TimeDelta {
+  }): void {
     const offsettime =
       this.getLeftSecond() + hour * 3600 + minute * 60 + second;
     if (offsettime < 0) {
       this.hour = 0;
       this.minute = 0;
       this.second = 0;
-      return this;
+      return;
     }
     this.hour = Math.floor(offsettime / 3600);
     this.minute = Math.floor((offsettime % 3600) / 60);
     this.second = offsettime % 60;
-    return this;
   }
 
   @GenieFunction("Set the value to the time")
@@ -88,11 +87,10 @@ export class TimeDelta extends HelperClass {
     hour?: number;
     minute?: number;
     second?: number;
-  }): TimeDelta {
+  }): void {
     this.hour = hour;
     this.minute = minute;
     this.second = second;
-    return this;
   }
 
   @GenieFunction("Get the second of the TimeDelta object")
