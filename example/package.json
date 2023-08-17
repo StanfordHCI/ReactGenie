@@ -9,7 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@expo/webpack-config": "^0.17.2",
+    "@react-navigation/native": "^6.0.0",
+    "@react-navigation/native-stack": "^6.9.9",
     "dotenv": "^16.3.1",
     "expo": "^46.0.9",
     "expo-constants": "~13.2.4",
@@ -21,7 +24,7 @@
     "react-native-screens": "~3.15.0",
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.2",
-    "reactgenie-lib": "file:..",
+    "reactgenie-lib": "../",
     "redux": "^4.2.0"
   },
   "devDependencies": {

@@ -4,23 +4,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const { ProgressPlugin } = require('webpack');
 
-// const compileNodeModules = [
-//     'react-native-vector-icons',
-// ].map((moduleName) => path.resolve(appDirectory, `node_modules/${moduleName}`));
-const appDirectory = path.resolve(__dirname, '../');
-const ttfLoaderConfiguration = {
-    test: /\.ttf$/,
-    loader: 'url-loader', // or directly file-loader
-    include: [
-        path.resolve(appDirectory, 'node_modules/react-native-vector-icons')
-    ]
-};
-
 module.exports = function (env, argv) {
     return {
         name: 'reactgenie-lib',
         mode: argv.mode,
         entry: path.resolve(__dirname, 'src/index.ts'),
+
         output: {
             filename: 'index.js',
             library: '$',
@@ -38,6 +27,7 @@ module.exports = function (env, argv) {
 
                 {
                     test: /\.(png|jpg|gif)$/i,
+                    exclude: /node_modules/,
                     use: [
                         {
                             loader: 'file-loader',
@@ -46,15 +36,21 @@ module.exports = function (env, argv) {
                             }
                         }
                     ]
-                },
-                ttfLoaderConfiguration
+                }
             ]
         },
         externals: {
             'react': 'react',
             'react-dom': 'react-dom',
             'react-native': 'react-native',
-            '@react-navigation/stack': '@react-navigation/stack'
+            '@react-navigation/stack': '@react-navigation/stack',
+
+            'reflect-metadata': 'reflect-metadata',
+            'react-redux': 'react-redux',
+            '@react-native-material/core': '@react-native-material/core',
+            '@react-navigation/native': '@react-navigation/native',
+            'web-speech-cognitive-services': 'web-speech-cognitive-services',
+            'reactgenie-dsl': 'reactgenie-dsl'
         },
         resolve: {
             alias: {

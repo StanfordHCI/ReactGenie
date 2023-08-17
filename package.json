@@ -7,8 +7,16 @@
     "repository": "StanfordHCI/reactgenie",
     "keywords": [],
     "main": "dist/index.js",
+    "files": [
+        "src/**",
+        "dist/**"
+    ],
+    "directories": {
+        "src": "src"
+    },
     "scripts": {
         "build": "webpack --mode=production",
+        "dev": "webpack --mode=development",
         "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
         "lint:fix": "yarn lint --fix",
         "test": "jest"
