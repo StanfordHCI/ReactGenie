@@ -5,8 +5,7 @@ module.exports = function (api) {
             ['@babel/preset-env', { targets: { node: 'current' } }],
             '@babel/preset-react',
             '@babel/preset-flow',
-            '@babel/preset-typescript',
-            'module:metro-react-native-babel-preset'
+            '@babel/preset-typescript'
         ],
         plugins: [
             ['@babel/plugin-proposal-decorators', { legacy: true }],

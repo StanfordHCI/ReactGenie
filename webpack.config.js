@@ -54,10 +54,7 @@ module.exports = function (env, argv) {
             'react': 'react',
             'react-dom': 'react-dom',
             'react-native': 'react-native',
-            '@react-navigation/stack': '@react-navigation/stack',
-            '@expo/vector-icons': '@expo/vector-icons',
-            'react-native-elements': 'react-native-elements',
-            'react-native-vector-icons': 'react-native-vector-icons'
+            '@react-navigation/stack': '@react-navigation/stack'
         },
         resolve: {
             alias: {
