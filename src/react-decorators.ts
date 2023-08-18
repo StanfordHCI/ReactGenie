@@ -273,7 +273,7 @@ export function GenieClassInterface(
     const newGenieInterfaceSpec: GenieInterfaceStoreElement = {
       objectClassName: type,
       viewClassName: target.name,
-      title: titleFunction,
+      title: titleFunction as (any: any) => string,
       function: newTarget,
       displayPriority: displayPriorityFunction,
     };
