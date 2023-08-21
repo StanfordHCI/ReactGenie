@@ -8,9 +8,16 @@
     "keywords": [],
     "main": "dist/index.js",
     "scripts": {
-        "prepare": "rm -r dist && tsc --emitDeclarationOnly && npx babel src --out-file-extension .js --out-dir dist --extensions \".ts\" --source-maps inline && npx babel src --out-file-extension .jsx --out-dir dist --extensions \".tsx\" --source-maps inline"
+        "test": "babel-node -x .ts ./scripts/get-prompt.ts",
+        "prepare": "rm -r dist && tsc --emitDeclarationOnly && npx babel src --out-file-extension .js --out-dir dist --extensions \".ts\" --source-maps inline && npx babel src --out-file-extension .js --out-dir dist --extensions \".tsx\" --source-maps inline"
+
+    },
+    "bin": {
+        "prompt": "./scripts/test.sh"
     },
     "devDependencies": {
+        "@babel/cli": "^7.22.10",
+        "@babel/node": "^7.22.10",
         "@types/react-native": "^0.69.5",
         "@types/react-speech-recognition": "^3.9.0",
         "@typescript-eslint/eslint-plugin": "^5.60.1",
@@ -26,6 +33,7 @@
     ],
     "dependencies": {
         "@babel/core": "^7.18.13",
+        "@babel/plugin-proposal-decorators": "^7.22.10",
         "@babel/preset-react": "^7.22.5",
         "@expo/vector-icons": "^13.0.0",
         "@react-native-material/core": "^1.3.7",
