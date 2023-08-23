@@ -45,7 +45,7 @@ fs.writeFile("./__test__/dry-run-input.txt", "", function (err) {
   console.log("Created dry-run input!");
 });
 
-fs.writeFile("./__test__/dry-run-output.txt", "", function (err) {
+fs.writeFile("./__test__/dry-run-result.txt", "", function (err) {
   if (err) throw err;
   console.log("Created dry-run output!");
 });
@@ -98,4 +98,17 @@ const jest_config =
 fs.writeFile("./jest.config.js", jest_config, function (err) {
   if (err) throw err;
   console.log("Created jest config!");
+});
+
+const mocksName = "./mocks";
+
+if (!fs.existsSync(mocksName)) {
+  fs.mkdirSync(mocksName);
+}
+
+const mock_config = "module.exports = '';";
+
+fs.writeFile("./mocks/fileMock.js", mock_config, function (err) {
+  if (err) throw err;
+  console.log("Created mock config!");
 });
