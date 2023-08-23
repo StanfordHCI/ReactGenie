@@ -34,8 +34,7 @@ import {
   NavigatorState,
   useGenieSelector,
 } from "./shared-store";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
 
 const Stack = createStackNavigator();
 export let GenieInterpreter: NlInterpreter;
@@ -336,7 +335,7 @@ export const ModalityProvider = (props: {
               alignItems: "center",
             }}
           >
-            <Icon name="microphone" size={30} color="#ffffff" />
+            {/*<Image source={require("./img/microphone.png")}></Image>*/}
           </View>
         </TouchableOpacity>
       </div>

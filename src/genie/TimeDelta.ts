@@ -101,19 +101,19 @@ export class TimeDelta extends HelperClass {
   toString() {
     return `${this.hour}:${this.minute}:${this.second}`;
   }
-}
 
-export const TimeDeltaExamples = [
-  {
-    user_utterance: "20 miniutes later",
-    example_parsed: "TimeDelta.CreateObject({minute: 20})",
-  },
-  {
-    user_utterance: "1hour later",
-    example_parsed: "TimeDelta.CreateObject({hour: 1})",
-  },
-  {
-    user_utterance: "1hour 20miniutes later",
-    example_parsed: "TimeDelta.CreateObject({hour: 1, minute: 20})",
-  },
-];
+  static Examples = [
+    {
+      user_utterance: "20 miniutes later",
+      example_parsed: "TimeDelta.CreateObject({minute: 20})",
+    },
+    {
+      user_utterance: "1hour later",
+      example_parsed: "TimeDelta.CreateObject({hour: 1})",
+    },
+    {
+      user_utterance: "1hour 20miniutes later",
+      example_parsed: "TimeDelta.CreateObject({hour: 1, minute: 20})",
+    },
+  ];
+}
