@@ -1,6 +1,6 @@
 {
     "name": "reactgenie-lib",
-    "version": "1.1.17",
+    "version": "1.1.18",
     "description": "A Toolkit for Multimodal Applications",
     "author": "valkjsaaa",
     "license": "Apache-2.0",
@@ -12,7 +12,8 @@
         "prepare": "rm -r dist && tsc --emitDeclarationOnly && npx babel src --out-file-extension .js --out-dir dist --extensions \".ts\" --source-maps inline && npx babel src --out-file-extension .js --out-dir dist --extensions \".tsx\" --source-maps inline"
     },
     "bin": {
-        "prompt": "./scripts/test.sh"
+        "get-prompt": "./scripts/prompt.js",
+        "dry-run": "./scripts/dry-run.js"
     },
     "devDependencies": {
         "@babel/cli": "^7.22.10",
