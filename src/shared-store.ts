@@ -61,7 +61,11 @@ const shallowEqualWithArray = (left: any, right: any) => {
 const convertGenieClassToState = (obj: any) => {
   if (Array.isArray(obj)) {
     return obj.map((element) => convertGenieClassToState(element));
-  } else if (obj === undefined || obj.constructor === undefined) {
+  } else if (
+    obj === null ||
+    obj === undefined ||
+    obj.constructor === undefined
+  ) {
     return obj;
   } else if (obj.constructor.prototype instanceof GenieObject) {
     if (obj.constructor.prototype instanceof DataClass) {
