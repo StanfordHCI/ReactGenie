@@ -109,7 +109,8 @@ function jsonifyResult(result: any) {
     if (
       result.objectType === "string" ||
       result.objectType === "int" ||
-      result.objectType === "boolean"
+      result.objectType === "boolean" ||
+      result.objectType === "float"
     ) {
       resultStr = { value: result.value };
     } else if (result.objectType === "void") {
