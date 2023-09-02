@@ -9,32 +9,33 @@ if (!fs.existsSync(folderName)) {
 
 console.log("Test folder created");
 
-const dry_run_test =
-  'import {DslInterpreter, DescriptorPromptGen} from "reactgenie-dsl";\n' +
-  'import {initReactGenie, AllGenieObjects} from "reactgenie-lib";\n' +
-  "import * as fs from 'fs';\n" +
-  "require('../genie/Timer')\n" +
-  "\n" +
-  "const reactGenieStore = initReactGenie();\n" +
-  "let descriptors = []\n" +
-  "for (const key in AllGenieObjects) {\n" +
-  "    descriptors.push(AllGenieObjects[key].ClassDescriptor)\n" +
-  "    // console.log(key)\n" +
-  "}\n" +
-  "\n" +
-  "const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');\n" +
-  "console.log(cmd);\n" +
-  "const interpreter = new DslInterpreter(descriptors, true);\n" +
-  "\n" +
-  "try {\n" +
-  "    let funcCallResult = interpreter.interpret(cmd);\n" +
-  "    // print ok or success\n" +
-  "    fs.writeFileSync('./__test__/dry-run-result.txt', \"Success\");\n" +
-  "}\n" +
-  "catch (e) {\n" +
-  "    fs.writeFileSync('./__test__/dry-run-result.txt', e.toString());\n" +
-  "}\n" +
-  'test("test", () => {});\n';
+const dry_run_test = `
+import {DslInterpreter, DescriptorPromptGen} from "reactgenie-dsl";
+import {initReactGenie, AllGenieObjects} from "reactgenie-lib";
+import * as fs from 'fs';
+require('../genie/Timer')
+
+const reactGenieStore = initReactGenie();
+let descriptors = []
+for (const key in AllGenieObjects) {
+    descriptors.push(AllGenieObjects[key].ClassDescriptor)
+    // console.log(key)
+}
+
+const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');
+console.log(cmd);
+const interpreter = new DslInterpreter(descriptors, true);
+
+try {
+    let funcCallResult = interpreter.interpret(cmd);
+    // print ok or success
+    fs.writeFileSync('./__test__/dry-run-result.txt', "Success");
+}
+catch (e) {
+    fs.writeFileSync('./__test__/dry-run-result.txt', e.toString());
+}
+test("test", () => {});
+    `;
 
 fs.writeFile("./__test__/dry-run.test.ts", dry_run_test, function (err) {
   if (err) throw err;
