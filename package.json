@@ -9,7 +9,7 @@
     "main": "dist/index.js",
     "scripts": {
         "test": "babel-node -x .ts ./scripts/get-prompt.ts",
-        "prepare": "rm -r dist && tsc --emitDeclarationOnly && npx babel src --out-file-extension .js --out-dir dist --extensions \".ts\" --source-maps inline && npx babel src --out-file-extension .js --out-dir dist --extensions \".tsx\" --source-maps inline"
+        "prepare": "if [ -d \"dist\", ]; then rm -r dist; fi && tsc --emitDeclarationOnly && npx babel src --out-file-extension .js --out-dir dist --extensions \".ts\" --source-maps inline && npx babel src --out-file-extension .js --out-dir dist --extensions \".tsx\" --source-maps inline"
     },
     "bin": {
         "get-prompt": "./scripts/prompt.js",

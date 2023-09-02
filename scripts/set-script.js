@@ -13,7 +13,15 @@ const dry_run_test = `
 import {DslInterpreter, DescriptorPromptGen} from "reactgenie-dsl";
 import {initReactGenie, AllGenieObjects} from "reactgenie-lib";
 import * as fs from 'fs';
-require('../genie/Timer')
+
+// list all files in "../genie" folder
+const files = fs.readdirSync("./genie");
+// get only ts files
+const tsFiles = files.filter((file) => file.endsWith(".ts"));
+// require all ts files
+tsFiles.forEach((file) => {
+  require("../genie/" + file);
+});
 
 const reactGenieStore = initReactGenie();
 let descriptors = []
@@ -29,10 +37,10 @@ const interpreter = new DslInterpreter(descriptors, true);
 try {
     let funcCallResult = interpreter.interpret(cmd);
     // print ok or success
-    fs.writeFileSync('./__test__/dry-run-result.txt', "Success");
+    fs.writeFileSync('./__test__/dry-run-result.txt', JSON.stringify({status: 'ok', result: funcCallResult}));
 }
 catch (e) {
-    fs.writeFileSync('./__test__/dry-run-result.txt', e.toString());
+    fs.writeFileSync('./__test__/dry-run-result.txt', JSON.stringify({status: 'error', result: e}));
 }
 test("test", () => {});
     `;
