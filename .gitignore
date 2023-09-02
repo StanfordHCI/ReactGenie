@@ -262,3 +262,5 @@ n
 
 #Mac file
 .DS_store
+
+dist/
