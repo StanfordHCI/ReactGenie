@@ -14,6 +14,7 @@ import {DslInterpreter, DescriptorPromptGen} from "reactgenie-dsl";
 import {initReactGenie, AllGenieObjects} from "reactgenie-lib";
 import * as fs from 'fs';
 
+test("test", () => {
 // list all files in "../genie" folder
 const files = fs.readdirSync("./genie");
 // get only ts files
@@ -23,26 +24,45 @@ tsFiles.forEach((file) => {
   require("../genie/" + file);
 });
 
+//set descriptor
 const reactGenieStore = initReactGenie();
 let descriptors = []
 for (const key in AllGenieObjects) {
     descriptors.push(AllGenieObjects[key].ClassDescriptor)
     // console.log(key)
 }
-
-const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');
-console.log(cmd);
 const interpreter = new DslInterpreter(descriptors, true);
 
-try {
-    let funcCallResult = interpreter.interpret(cmd);
-    // print ok or success
-    fs.writeFileSync('./__test__/dry-run-result.txt', JSON.stringify({status: 'ok', result: funcCallResult}));
+//get all commands
+const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');
+// split by new line
+const cmdList = cmd.split('\\n');
+console.log(cmdList);
+
+let output = "";
+let error = "";
+for (let i = 0; i < cmdList.length; i++) {
+    const cmd = cmdList[i];
+    try {
+        let funcCallResult = interpreter.interpret(cmd);
+        output += JSON.stringify({status: 'ok', result: funcCallResult}) + '\\n';
+        // print ok or success
+    }
+    catch (e) {
+        output += JSON.stringify({status: 'error', result: e}) + '\\n';
+
+        if (e['name'] == 'SyntaxError')
+            console.log(e['name']);
+        else if(e['field_name'] != undefined)
+            error += JSON.stringify({id: i, result: e['class_name'] + '.' + e['field_name']}) + '\\n';
+        else if(e['func_name'] != undefined)
+            error += JSON.stringify({id: i, result: e['class_name'] + '.' + e['func_name'] + '()'}) + '\\n';
+    }
 }
-catch (e) {
-    fs.writeFileSync('./__test__/dry-run-result.txt', JSON.stringify({status: 'error', result: e}));
-}
-test("test", () => {});
+
+fs.writeFileSync('./__test__/dry-run-output.txt', output);
+fs.writeFileSync('./__test__/dry-run-error.txt', error);
+});
     `;
 
 fs.writeFile("./__test__/dry-run.test.ts", dry_run_test, function (err) {
@@ -54,35 +74,49 @@ fs.writeFile("./__test__/dry-run-input.txt", "", function (err) {
   console.log("Created dry-run input!");
 });
 
-fs.writeFile("./__test__/dry-run-result.txt", "", function (err) {
+fs.writeFile("./__test__/dry-run-output.txt", "", function (err) {
   if (err) throw err;
   console.log("Created dry-run output!");
 });
 
-const prompt_test =
-  'import {DslInterpreter, GenieObject} from "reactgenie-dsl";\n' +
-  'import {ClassDescriptor, DateTime, TimeDelta} from "reactgenie-lib";\n' +
-  'import {initReactGenie} from "reactgenie-lib";\n' +
-  'import {AllGenieObjects} from "reactgenie-dsl";\n' +
-  'import {DescriptorPromptGen, sharedState} from "reactgenie-dsl";\n' +
-  'import fs from "fs";\n' +
-  "require('../genie/Timer')\n" +
-  "\n" +
-  "const reactGenieStore = initReactGenie();\n" +
-  "\n" +
-  "    let descriptors:ClassDescriptor<GenieObject>[] = []\n" +
-  "    for (const key in AllGenieObjects) {\n" +
-  "        descriptors.push(AllGenieObjects[key].ClassDescriptor)\n" +
-  "        // console.log(key)\n" +
-  "    }\n" +
-  "\n" +
-  "\n" +
-  "    // @ts-ignore\n" +
-  '    const nl_interpreter = new DescriptorPromptGen(descriptors,sharedState["__EXAMPLES__"])\n' +
-  "    const prompt_basic = nl_interpreter.prompt_basic()\n" +
-  "    fs.writeFileSync('./__test__/prompt.txt', prompt_basic);\n" +
-  "\n" +
-  'test("test", () => {});\n';
+fs.writeFile("./__test__/dry-run-error.txt", "", function (err) {
+  if (err) throw err;
+  console.log("Created dry-run error!");
+});
+
+const prompt_test = `
+  import {DslInterpreter, GenieObject} from "reactgenie-dsl";
+  import {ClassDescriptor, DateTime, TimeDelta} from "reactgenie-lib";
+  import {initReactGenie} from "reactgenie-lib";
+  import {AllGenieObjects} from "reactgenie-dsl";
+  import {DescriptorPromptGen, sharedState} from "reactgenie-dsl";
+  import fs from "fs";
+  
+  test("test", () => {
+  const files = fs.readdirSync("./genie");
+  // get only ts files
+  const tsFiles = files.filter((file) => file.endsWith(".ts"));
+  // require all ts files
+  tsFiles.forEach((file) => {
+      require("../genie/" + file);
+  });
+  
+  const reactGenieStore = initReactGenie();
+  
+      let descriptors:ClassDescriptor<GenieObject>[] = []
+      for (const key in AllGenieObjects) {
+          descriptors.push(AllGenieObjects[key].ClassDescriptor)
+          // console.log(key)
+      }
+  
+  
+      // @ts-ignore
+      const nl_interpreter = new DescriptorPromptGen(descriptors,sharedState["__EXAMPLES__"])
+      const prompt_basic = nl_interpreter.prompt_basic()
+      fs.writeFileSync('./__test__/prompt.txt', prompt_basic);
+  
+  });
+`;
 
 fs.writeFile("./__test__/prompt.test.ts", prompt_test, function (err) {
   if (err) throw err;
