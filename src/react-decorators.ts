@@ -143,7 +143,7 @@ export function RetrieveInterfaces(): GenieInterfaceSpec[] {
 const reactGenieClassModifier: GenieClassModifier = (
   target: typeof GenieObject
 ) => {
-  console.log("ReactGenie Class modifier called on " + target.name);
+  // console.log("ReactGenie Class modifier called on " + target.name);
 
   // append method `current()` to the class
   /**

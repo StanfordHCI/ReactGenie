@@ -40,29 +40,20 @@ const cmdList = cmd.split('\\n');
 console.log(cmdList);
 
 let output = "";
-let error = "";
 for (let i = 0; i < cmdList.length; i++) {
     const cmd = cmdList[i];
     try {
         let funcCallResult = interpreter.interpret(cmd);
-        output += JSON.stringify({status: 'ok', result: funcCallResult}) + '\\n';
+        output += JSON.stringify({status: 'success', result: funcCallResult}) + '\\n';
         // print ok or success
     }
     catch (e) {
         output += JSON.stringify({status: 'error', result: e}) + '\\n';
-
-        if (e['name'] == 'SyntaxError')
-            console.log(e['name']);
-        else if(e['field_name'] != undefined)
-            error += JSON.stringify({id: i, result: e['class_name'] + '.' + e['field_name']}) + '\\n';
-        else if(e['func_name'] != undefined)
-            error += JSON.stringify({id: i, result: e['class_name'] + '.' + e['func_name'] + '()'}) + '\\n';
     }
 }
 
 fs.writeFileSync('./__test__/dry-run-output.txt', output);
-fs.writeFileSync('./__test__/dry-run-error.txt', error);
-});
+}); 
     `;
 
 fs.writeFile("./__test__/dry-run.test.ts", dry_run_test, function (err) {
@@ -79,10 +70,10 @@ fs.writeFile("./__test__/dry-run-output.txt", "", function (err) {
   console.log("Created dry-run output!");
 });
 
-fs.writeFile("./__test__/dry-run-error.txt", "", function (err) {
-  if (err) throw err;
-  console.log("Created dry-run error!");
-});
+// fs.writeFile("./__test__/dry-run-error.txt", "", function (err) {
+//   if (err) throw err;
+//   console.log("Created dry-run error!");
+// });
 
 const prompt_test = `
   import {DslInterpreter, GenieObject} from "reactgenie-dsl";
