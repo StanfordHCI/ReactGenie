@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
 const { spawn } = require("child_process");
-const childProcess = spawn("jest", ["./__test__/prompt.test.ts"]);
+
+let command = "npx";
+
+// Check if the operating system is Windows
+if (process.platform === "win32") {
+  command = "npx.cmd";
+}
+
+const childProcess = spawn(command, ["jest", "./__test__/prompt.test.ts"]);
 console.log("Generating Prompt ... ");
 
 let fs = require("fs");

@@ -7,7 +7,13 @@
 // fs.writeFileSync("./__test__/dry-run-input.txt", args[0]);
 
 const { spawn } = require("child_process");
-const childProcess = spawn("jest", ["./__test__/dry-run.test.ts"]);
+let command = "npx";
+
+// Check if the operating system is Windows
+if (process.platform === "win32") {
+  command = "npx.cmd";
+}
+const childProcess = spawn(command, ["jest", "./__test__/dry-run.test.ts"]);
 childProcess.stdout.pipe(process.stdout);
 
 console.log("Running Test ... ");
