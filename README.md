@@ -2,7 +2,7 @@
 
 > A Toolkit for Multimodal Applications
 
-[![NPM](https://img.shields.io/npm/v/reactgenie.svg)](https://www.npmjs.com/package/reactgenie-lib) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/reactgenie-lib.svg)](https://www.npmjs.com/package/reactgenie-lib) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 
 
