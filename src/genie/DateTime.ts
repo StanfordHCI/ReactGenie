@@ -212,6 +212,10 @@ export class DateTime extends HelperClass {
     return `${this.year}-${this.month}-${this.day}`;
   }
 
+  getDate(): Date {
+    return this._date;
+  }
+
   static Examples = [
     {
       user_utterance: "yesterday",
