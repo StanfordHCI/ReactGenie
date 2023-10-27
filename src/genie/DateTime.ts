@@ -8,6 +8,8 @@ import "reflect-metadata";
 
 @GenieClass("Representing a date or time")
 export class DateTime extends HelperClass {
+  private _date: Date;
+
   @GenieProperty()
   public year: number;
   @GenieProperty()
@@ -15,7 +17,7 @@ export class DateTime extends HelperClass {
   @GenieProperty()
   public day: number;
   @GenieProperty()
-  public dayOfWeek: string;
+  public dayOfWeek: number;
   @GenieProperty()
   public hour: number;
   @GenieProperty()
@@ -24,13 +26,48 @@ export class DateTime extends HelperClass {
   public second: number;
   // public date;
 
+  @GenieProperty()
   static sunday = 0;
+  @GenieProperty()
   static monday = 1;
+  @GenieProperty()
   static tuesday = 2;
+  @GenieProperty()
   static wednesday = 3;
+  @GenieProperty()
   static thursday = 4;
+  @GenieProperty()
   static friday = 5;
+  @GenieProperty()
   static saturday = 6;
+
+  private updateDate() {
+    this.year = this._date.getFullYear();
+    this.month = this._date.getMonth() + 1;
+    this.day = this._date.getDate();
+    this.hour = this._date.getHours();
+    this.minute = this._date.getMinutes();
+    this.dayOfWeek = this._date.getDay();
+  }
+
+  @GenieFunction("Get the current date time")
+  static now(): DateTime {
+    return DateTime.fromDate(new Date());
+  }
+
+  @GenieFunction("Get the current date (set hour, minute, second to 0)")
+  static today(): DateTime {
+    const dt = DateTime.now();
+    dt.setDate({ hour: 0, minute: 0, second: 0 });
+    return dt;
+  }
+
+  static fromDate(date: Date) {
+    const dt = DateTime.CreateObject({});
+    dt._date = date;
+    dt.updateDate();
+    return dt;
+  }
 
   constructor({
     year = undefined,
@@ -48,21 +85,15 @@ export class DateTime extends HelperClass {
     second?: number;
   }) {
     super({});
-    this.year = 0;
-    this.month = 0;
-    this.day = 0;
-    this.hour = 0;
-    this.minute = 0;
-    this.second = 0;
-    this.dayOfWeek = "";
-    // this.setDate({year, month, day, hour, minute});
+    this._date = new Date();
+    this.setDate({ year, month, day, hour, minute, second });
   }
 
   static setup() {}
 
   // custom comparator for sorting
   static compare(a: DateTime, b: DateTime) {
-    return a.getDate().getTime() - b.getDate().getTime();
+    return a._date.getTime() - b._date.getTime();
   }
 
   static fromString(data: string) {
@@ -83,13 +114,8 @@ export class DateTime extends HelperClass {
     dt.hour = date.getHours();
     dt.minute = date.getMinutes();
     dt.second = date.getSeconds();
-    dt.dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
+    dt.dayOfWeek = date.getDay();
     return dt;
-  }
-
-  @GenieFunction("Get the current date time")
-  static today(): DateTime {
-    return DateTime.fromString("today");
   }
 
   @GenieFunction("Create a new date time object")
@@ -99,14 +125,16 @@ export class DateTime extends HelperClass {
     day = undefined,
     hour = undefined,
     minute = undefined,
+    second = undefined,
   }: {
     year?: number;
     month?: number;
     day?: number;
     hour?: number;
     minute?: number;
+    second?: number;
   }): DateTime {
-    return DateTime.CreateObject({ year, month, day, hour, minute });
+    return DateTime.CreateObject({ year, month, day, hour, minute, second });
   }
 
   @GenieFunction("Add a date offset to the current date")
@@ -125,28 +153,60 @@ export class DateTime extends HelperClass {
     minute?: number;
     second?: number;
   }): DateTime {
-    this.year = this.year + year;
-    this.month = this.month + month;
-    this.day = this.day + day;
-    this.hour = this.hour + hour;
-    this.minute = this.minute + minute;
-    this.second = this.second + second;
+    this._date.setFullYear(this._date.getFullYear() + year);
+    this._date.setMonth(this._date.getMonth() + month);
+    this._date.setDate(this._date.getDate() + day);
+    this._date.setHours(this._date.getHours() + hour);
+    this._date.setMinutes(this._date.getMinutes() + minute);
+    this._date.setSeconds(this._date.getSeconds() + second);
+    this.updateDate();
     return this;
   }
 
-  @GenieFunction("Get the date of the DateTime object")
-  getDate(): Date {
-    const date = new Date();
-    date.setFullYear(this.year);
-    date.setMonth(this.month);
-    date.setDate(this.day);
-    date.setHours(this.hour);
-    date.setMinutes(this.minute);
-    date.setSeconds(this.second);
-    return date;
+  @GenieFunction("Set the date of the date time object")
+  setDate({
+    year = undefined,
+    month = undefined,
+    day = undefined,
+    hour = undefined,
+    minute = undefined,
+    second = undefined,
+    day_of_the_week = undefined,
+  }: {
+    year?: number;
+    month?: number;
+    day?: number;
+    hour?: number;
+    minute?: number;
+    second?: number;
+    day_of_the_week?: number;
+  }): DateTime {
+    if (year !== undefined) {
+      this._date.setFullYear(year);
+    }
+    if (month !== undefined) {
+      this._date.setMonth(month - 1);
+    }
+    if (day !== undefined) {
+      this._date.setDate(day);
+    }
+    if (day_of_the_week !== undefined) {
+      this._date.setDate(
+        this._date.getDate() + (day_of_the_week - this._date.getDay())
+      );
+    }
+    if (hour !== undefined) {
+      this._date.setHours(hour);
+    }
+    if (minute !== undefined) {
+      this._date.setMinutes(minute);
+    }
+    if (second !== undefined) {
+      this._date.setSeconds(second);
+    }
+    this.updateDate();
+    return this;
   }
-
-  // @GenieFunction("Set the date of the date time object")
 
   toString() {
     return `${this.year}-${this.month}-${this.day}`;
@@ -164,6 +224,15 @@ export class DateTime extends HelperClass {
     {
       user_utterance: "next week",
       example_parsed: "DateTime.today().addDateOffset(day: 7)",
+    },
+    {
+      user_utterance: "this monday",
+      example_parsed:
+        "DateTime.today().setDate(day_of_the_week: DateTime.monday)",
+    },
+    {
+      user_utterance: "5 minutes later",
+      example_parsed: "DateTime.now().addDateOffset(minute: 5)",
     },
   ];
 }
