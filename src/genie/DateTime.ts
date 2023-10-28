@@ -5,41 +5,42 @@ import {
   GenieFunction,
 } from "reactgenie-dsl";
 import "reflect-metadata";
+import { int } from "reactgenie-dsl";
 
 @GenieClass("Representing a date or time")
 export class DateTime extends HelperClass {
   private _date: Date;
 
   @GenieProperty()
-  public year: number;
+  public year: int;
+  @GenieProperty("month of the year, january is 1")
+  public month: int;
   @GenieProperty()
-  public month: number;
+  public day: int;
   @GenieProperty()
-  public day: number;
+  public dayOfWeek: int;
   @GenieProperty()
-  public dayOfWeek: number;
+  public hour: int;
   @GenieProperty()
-  public hour: number;
+  public minute: int;
   @GenieProperty()
-  public minute: number;
-  @GenieProperty()
-  public second: number;
+  public second: int;
   // public date;
 
   @GenieProperty()
-  static sunday = 0;
+  static sunday: int = 0;
   @GenieProperty()
-  static monday = 1;
+  static monday: int = 1;
   @GenieProperty()
-  static tuesday = 2;
+  static tuesday: int = 2;
   @GenieProperty()
-  static wednesday = 3;
+  static wednesday: int = 3;
   @GenieProperty()
-  static thursday = 4;
+  static thursday: int = 4;
   @GenieProperty()
-  static friday = 5;
+  static friday: int = 5;
   @GenieProperty()
-  static saturday = 6;
+  static saturday: int = 6;
 
   private updateDate() {
     this.year = this._date.getFullYear();
@@ -77,12 +78,12 @@ export class DateTime extends HelperClass {
     minute = undefined,
     second = undefined,
   }: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-    second?: number;
+    year?: int;
+    month?: int;
+    day?: int;
+    hour?: int;
+    minute?: int;
+    second?: int;
   }) {
     super({});
     this._date = new Date();
@@ -109,7 +110,7 @@ export class DateTime extends HelperClass {
       date.setDate(date.getDate() - 1);
     } else date = new Date(data);
     dt.year = date.getFullYear();
-    dt.month = date.getMonth();
+    dt.month = date.getMonth() + 1;
     dt.day = date.getDate();
     dt.hour = date.getHours();
     dt.minute = date.getMinutes();
@@ -127,12 +128,12 @@ export class DateTime extends HelperClass {
     minute = undefined,
     second = undefined,
   }: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-    second?: number;
+    year?: int;
+    month?: int;
+    day?: int;
+    hour?: int;
+    minute?: int;
+    second?: int;
   }): DateTime {
     return DateTime.CreateObject({ year, month, day, hour, minute, second });
   }
@@ -146,12 +147,12 @@ export class DateTime extends HelperClass {
     minute = 0,
     second = 0,
   }: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-    second?: number;
+    year?: int;
+    month?: int;
+    day?: int;
+    hour?: int;
+    minute?: int;
+    second?: int;
   }): DateTime {
     this._date.setFullYear(this._date.getFullYear() + year);
     this._date.setMonth(this._date.getMonth() + month);
@@ -173,13 +174,13 @@ export class DateTime extends HelperClass {
     second = undefined,
     day_of_the_week = undefined,
   }: {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-    second?: number;
-    day_of_the_week?: number;
+    year?: int;
+    month?: int;
+    day?: int;
+    hour?: int;
+    minute?: int;
+    second?: int;
+    day_of_the_week?: int;
   }): DateTime {
     if (year !== undefined) {
       this._date.setFullYear(year);
