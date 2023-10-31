@@ -129,10 +129,11 @@ function stringifyResult(result: any) {
 }
 
 export function executeGenieCode(command: string): GenieCodeResult {
-  return genieDispatch(() => {
+  return genieDispatch(async () => {
     console.log(`before executing state ${JSON.stringify(sharedState)}`);
     try {
-      const result = GenieInterpreter.dslInterpreter.interpretSteps(command);
+      const result = await GenieInterpreter.dslInterpreter.interpretSteps(command);
+      console.log(`executed result ${result}`);
       return {
         success: true,
         results: result,
