@@ -30,11 +30,11 @@ export interface NavigatorState {
 }
 
 export const useGenieCodeSelector = (command: string) => {
-  return (state: any) => {
+  return async (state: any) => {
     uiActive = false;
     console.log(`before executing state ${JSON.stringify(state)}`);
     setSharedState(state);
-    const result = GenieInterpreter.dslInterpreter.interpret(command);
+    const result = await GenieInterpreter.dslInterpreter.interpret(command);
     console.log(`executed result ${result}`);
     console.log(`after executing state ${JSON.stringify(state)}`);
     uiActive = true;
@@ -132,8 +132,10 @@ export function executeGenieCode(command: string): GenieCodeResult {
   return genieDispatch(async () => {
     console.log(`before executing state ${JSON.stringify(sharedState)}`);
     try {
-      const result = await GenieInterpreter.dslInterpreter.interpretSteps(command);
-      console.log(`executed result ${result}`);
+      const result = await GenieInterpreter.dslInterpreter.interpretSteps(
+        command
+      );
+      // console.log(`executed result ${result}`);
       return {
         success: true,
         results: result,

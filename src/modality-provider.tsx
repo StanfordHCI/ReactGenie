@@ -231,14 +231,15 @@ export const ModalityProvider = (props: {
       RetrieveInterfaces();
       setListenerState(ListenerStateEnum.Processing);
       setTranscript("");
-      GenieInterpreter.nlParser.parse(lastTranscript).then((result) => {
+      GenieInterpreter.nlParser.parse(lastTranscript).then(async (result) => {
         console.log(`parsed result: ${result}`);
         setInterimTranscript("");
         setListenerState(ListenerStateEnum.Idle);
         const genieInterfaces = RetrieveInterfaces();
-        const executionResult = executeGenieCode(result);
+        const executionResult = await executeGenieCode(result);
 
         if (executionResult.success) {
+          console.log("execution result: ", executionResult);
           displayResult(
             executionResult,
             lastTranscript,

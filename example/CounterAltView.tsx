@@ -42,7 +42,7 @@ const bigCounterPriority = (target: Counter) => {
 
 // typescript don't yet support function decorators: https://stackoverflow.com/a/39488555
 export const CounterAltView = GenieClassInterface(
-  (counter: Counter) => `${counter.name} Counter`,
+  "Counter",
   "Counter",
   bigCounterPriority
 )(CounterAltViewImpl);

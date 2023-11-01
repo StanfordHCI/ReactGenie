@@ -29,7 +29,8 @@ const CounterViewImpl = (props: { name: string }) => {
 
 // typescript don't yet support function decorators: https://stackoverflow.com/a/39488555
 export const CounterView = GenieClassInterface(
-  (counter: Counter) => `${counter.name} Counter`,
+ 
+  "Counter",
   "Counter",
   1
 )(CounterViewImpl);
