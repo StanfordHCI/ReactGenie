@@ -13,8 +13,9 @@ const dry_run_test = `
 import {DslInterpreter, DescriptorPromptGen} from "reactgenie-dsl";
 import {initReactGenie, AllGenieObjects} from "reactgenie-lib";
 import * as fs from 'fs';
+import { get } from "http";
 
-test("test", () => {
+test("test",  async () => {
 // list all files in "../genie" folder
 const files = fs.readdirSync("./genie");
 // get only ts files
@@ -36,19 +37,20 @@ const interpreter = new DslInterpreter(descriptors, true);
 //get all commands
 const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');
 // split by new line
-const cmdList = cmd.split('\\n');
+const cmdList = cmd.split('\n');
 console.log(cmdList);
 
 let output = "";
 for (let i = 0; i < cmdList.length; i++) {
     const cmd = cmdList[i];
     try {
-        let funcCallResult = interpreter.interpret(cmd);
-        output += JSON.stringify({status: 'success', result: funcCallResult}) + '\\n';
+        let funcCallResult = await interpreter.interpret(cmd);
+        console.log(funcCallResult);
+        output += JSON.stringify({status: 'success', result: funcCallResult}) + '\n';
         // print ok or success
     }
     catch (e) {
-        output += JSON.stringify({status: 'error', result: e}) + '\\n';
+        output += JSON.stringify({status: 'error', result: e}) + '\n';
     }
 }
 
