@@ -44,7 +44,7 @@
         "react-native-elements": "^3.4.3",
         "react-native-root-toast": "^3.4.1",
         "react-speech-recognition": "^3.9.1",
-        "reactgenie-dsl": "^0.0.31",
+        "reactgenie-dsl": "^0.0.32",
         "reflect-metadata": "^0.1.13",
         "web-speech-cognitive-services": "7.1.0"
     },
