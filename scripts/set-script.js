@@ -37,7 +37,7 @@ const interpreter = new DslInterpreter(descriptors, true);
 //get all commands
 const cmd = fs.readFileSync('./__test__/dry-run-input.txt', 'utf8');
 // split by new line
-const cmdList = cmd.split('\n');
+const cmdList = cmd.split("\\n");
 console.log(cmdList);
 
 let output = "";
@@ -46,11 +46,11 @@ for (let i = 0; i < cmdList.length; i++) {
     try {
         let funcCallResult = await interpreter.interpret(cmd);
         console.log(funcCallResult);
-        output += JSON.stringify({status: 'success', result: funcCallResult}) + '\n';
+        output += JSON.stringify({status: 'success', result: funcCallResult}) + "\\n";
         // print ok or success
     }
     catch (e) {
-        output += JSON.stringify({status: 'error', result: e}) + '\n';
+        output += JSON.stringify({status: 'error', result: e}) + "\\n";
     }
 }
 
