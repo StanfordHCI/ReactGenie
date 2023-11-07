@@ -120,7 +120,7 @@ export class DateTime extends HelperClass {
   }
 
   @GenieFunction("Create a new date time object")
-  CreateDatetime({
+  static CreateDatetime({
     year = undefined,
     month = undefined,
     day = undefined,
