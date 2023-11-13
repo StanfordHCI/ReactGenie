@@ -121,12 +121,12 @@ export class DateTime extends HelperClass {
 
   @GenieFunction("Create a new date time object")
   static CreateDatetime({
-    year = undefined,
-    month = undefined,
-    day = undefined,
-    hour = undefined,
-    minute = undefined,
-    second = undefined,
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
   }: {
     year?: int;
     month?: int;
@@ -166,13 +166,13 @@ export class DateTime extends HelperClass {
 
   @GenieFunction("Set the date of the date time object")
   setDate({
-    year = undefined,
-    month = undefined,
-    day = undefined,
-    hour = undefined,
-    minute = undefined,
-    second = undefined,
-    day_of_the_week = undefined,
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+    day_of_the_week,
   }: {
     year?: int;
     month?: int;
@@ -193,7 +193,7 @@ export class DateTime extends HelperClass {
     }
     if (day_of_the_week !== undefined) {
       this._date.setDate(
-        this._date.getDate() + (day_of_the_week - this._date.getDay())
+        this._date.getDate() + (day_of_the_week - this._date.getDay()),
       );
     }
     if (hour !== undefined) {
