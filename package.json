@@ -1,6 +1,6 @@
 {
     "name": "reactgenie-lib",
-    "version": "1.1.45",
+    "version": "1.1.46",
     "description": "A Toolkit for Multimodal Applications",
     "author": "valkjsaaa",
     "license": "Apache-2.0",
@@ -14,7 +14,8 @@
     "bin": {
         "get-prompt": "./scripts/prompt.js",
         "dry-run": "./scripts/dry-run.js",
-        "set-script": "./scripts/set-script.js"
+        "set-script": "./scripts/set-script.js",
+        "parse":"./scripts/parse.js"
     },
     "devDependencies": {
         "@babel/cli": "^7.23.0",

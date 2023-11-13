@@ -120,16 +120,61 @@ fs.writeFile("./__test__/prompt.txt", "", function (err) {
   console.log("Created prompt output!");
 });
 
-const jest_config =
-  "module.exports = {\n" +
-  '    testEnvironment: "jsdom",\n' +
-  '        preset: "jest-expo",\n' +
-  '        "moduleNameMapper": {\n' +
-  '        "\\\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",\n' +
-  '            "\\\\.(css|less)$": "<rootDir>/mocks/fileMock.js",\n' +
-  "            \"^uuid$\": require.resolve('uuid'),\n" +
-  "    }\n" +
-  "}";
+const parse_test = `
+import {NlParser, DescriptorPromptGen, ClassDescriptor, GenieObject, sharedState} from "reactgenie-dsl";
+import {initReactGenie, AllGenieObjects} from "reactgenie-lib";
+import * as fs from 'fs';
+let API_KEY = ""
+
+test("test",   async () => {
+    const files = fs.readdirSync("./genie");
+    const tsFiles = files.filter((file) => file.endsWith(".ts"));
+    tsFiles.forEach((file) => {
+        require("../genie/" + file);
+    });
+    const reactGenieStore = initReactGenie();
+
+    let descriptors:ClassDescriptor<GenieObject>[] = []
+    for (const key in AllGenieObjects) {
+        descriptors.push(AllGenieObjects[key].ClassDescriptor)
+    }
+
+
+    const testPath = process.argv;
+    const nl_interpreter = new DescriptorPromptGen(descriptors,sharedState["__EXAMPLES__"])
+
+    let NLP = new NlParser(nl_interpreter, API_KEY,"http://104.40.11.234:5000/v1");
+    // console.log(testPath);
+    let res = await NLP.parse(process.argv[3])
+    console.log(res)
+
+    // console.log(testPath[3]);
+}, 100000);
+    
+`;
+
+fs.writeFile("./__test__/parse.test.ts", prompt_test, function (err) {
+  if (err) throw err;
+  console.log("Created parse test!");
+});
+
+
+
+const jest_config = `
+module.exports = {
+  testEnvironment: "jsdom",
+      preset: "jest-expo",
+      "moduleNameMapper": {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
+          "\\.(css|less)$": "<rootDir>/mocks/fileMock.js",
+          "^uuid$": require.resolve('uuid'),
+  },
+  testEnvironmentOptions: {
+      url: 'http://104.40.11.234:5000/v1',
+      verbose: true,
+  },
+}
+  `;
 
 fs.writeFile("./jest.config.js", jest_config, function (err) {
   if (err) throw err;
