@@ -1,6 +1,6 @@
 {
     "name": "reactgenie-lib",
-    "version": "1.1.40",
+    "version": "1.1.41",
     "description": "A Toolkit for Multimodal Applications",
     "author": "valkjsaaa",
     "license": "Apache-2.0",
@@ -17,44 +17,45 @@
         "set-script": "./scripts/set-script.js"
     },
     "devDependencies": {
-        "@babel/cli": "^7.22.10",
-        "@babel/node": "^7.22.10",
-        "@types/react-native": "^0.69.5",
-        "@types/react-speech-recognition": "^3.9.0",
-        "@typescript-eslint/eslint-plugin": "^5.60.1",
-        "@typescript-eslint/parser": "^5.60.1",
-        "eslint": "^8.43.0",
+        "@babel/cli": "^7.23.0",
+        "@babel/node": "^7.22.19",
+        "@types/react-native": "^0.72.6",
+        "@types/react-speech-recognition": "^3.9.4",
+        "@typescript-eslint/eslint-plugin": "^6.10.0",
+        "@typescript-eslint/parser": "^6.10.0",
+        "eslint": "^8.53.0",
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "expo-yarn-workspaces": "^1.2.1",
-        "prettier": "2.8.8"
+        "expo-yarn-workspaces": "^2.2.2",
+        "prettier": "3.0.3"
     },
     "workspaces": [
         "example"
     ],
     "dependencies": {
-        "@babel/core": "^7.18.13",
-        "@babel/plugin-proposal-decorators": "^7.22.10",
-        "@babel/preset-react": "^7.22.5",
+        "@babel/core": "^7.23.3",
+        "@babel/plugin-proposal-decorators": "^7.23.3",
+        "@babel/preset-react": "^7.23.3",
         "@expo/vector-icons": "^13.0.0",
         "@react-native-material/core": "^1.3.7",
-        "@react-navigation/stack": "^6.3.16",
-        "@reduxjs/toolkit": "^1.8.5",
+        "@react-navigation/stack": "^6.3.20",
+        "@reduxjs/toolkit": "^1.9.7",
         "p-defer-es5": "^2.0.1",
         "react-native-elements": "^3.4.3",
-        "react-native-root-toast": "^3.4.1",
+        "react-native-root-toast": "^3.5.1",
         "react-speech-recognition": "^3.9.1",
-        "reactgenie-dsl": "^0.0.37",
+        "reactgenie-dsl": "^0.0.38",
         "reflect-metadata": "^0.1.13",
-        "web-speech-cognitive-services": "7.1.0"
+        "web-speech-cognitive-services": "7.1.3",
+        "regenerator-runtime": "^0.14.0"
     },
     "peerDependencies": {
-        "@react-navigation/native": "^6.0.0",
-        "@react-navigation/native-stack": "^6.9.9",
-        "react": "^18.0.0",
-        "react-dom": "18.0.0",
-        "react-native": "^0.69.9",
-        "react-redux": "^8.0.5",
+        "@react-navigation/native": "^6.1.9",
+        "@react-navigation/native-stack": "^6.9.17",
+        "react": "^18.2.0",
+        "react-dom": "18.2.0",
+        "react-native": "^0.72.6",
+        "react-redux": "^8.1.3",
         "redux": "^4.2.0"
     }
 }

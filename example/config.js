@@ -1,5 +1,4 @@
-import Constants from 'expo-constants';
-import 'dotenv/config'
+import Constants from "expo-constants";
 
 const ENV = {
   OPENAI_API_KEY: Constants.manifest.extra.OPENAI_API_KEY,
