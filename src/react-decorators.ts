@@ -131,7 +131,7 @@ export function InstantiateGenieObject(objectSpec: GenieObjectSpec): any {
 export function RetrieveInterfaces(): GenieInterfaceSpec[] {
   // scan through values of AllGenieObject and get the displayedInstances
   console.log(
-    `AllGenieObjectInterfaces ${JSON.stringify(AllGenieDisplayedInstances)}`
+    `AllGenieObjectInterfaces ${JSON.stringify(AllGenieDisplayedInstances)}`,
   );
   const displayedInstances: GenieInterfaceSpec[] = [];
   for (const key in AllGenieDisplayedInstances) {
@@ -141,9 +141,21 @@ export function RetrieveInterfaces(): GenieInterfaceSpec[] {
 }
 
 const reactGenieClassModifier: GenieClassModifier = (
-  target: typeof GenieObject
+  target: typeof GenieObject,
 ) => {
   // console.log("ReactGenie Class modifier called on " + target.name);
+
+  function pointToRectDistanceSq(
+    pointX: number,
+    pointY: number,
+    rect: GenieRect,
+  ): number {
+    // find closest point on rect to point
+    const closestX = Math.max(rect.x, Math.min(pointX, rect.x + rect.width));
+    const closestY = Math.max(rect.y, Math.min(pointY, rect.y + rect.height));
+    // calculate distance
+    return Math.pow(pointX - closestX, 2) + Math.pow(pointY - closestY, 2);
+  }
 
   // append method `current()` to the class
   /**
@@ -157,30 +169,17 @@ const reactGenieClassModifier: GenieClassModifier = (
     if (ClickPoints.length > 0) {
       // find the genie object that is closest to the click point
       let closest = genieInterfaces[0];
-      let closestDistance = Math.sqrt(
-        Math.pow(
-          ClickPoints[0].x - (closest.rect.x + closest.rect.width / 2),
-          2
-        ) +
-          Math.pow(
-            ClickPoints[0].y - (closest.rect.y + closest.rect.height / 2),
-            2
-          )
+      let closestDistance = pointToRectDistanceSq(
+        ClickPoints[0].x,
+        ClickPoints[0].y,
+        closest.rect,
       );
       for (let i = 1; i < genieInterfaces.length; i++) {
         if (genieInterfaces[i].className !== currentClassName) continue;
-        const distance = Math.sqrt(
-          Math.pow(
-            ClickPoints[0].x -
-              (genieInterfaces[i].rect.x + genieInterfaces[i].rect.width / 2),
-            2
-          ) +
-            Math.pow(
-              ClickPoints[0].y -
-                (genieInterfaces[i].rect.y +
-                  genieInterfaces[i].rect.height / 2),
-              2
-            )
+        const distance = pointToRectDistanceSq(
+          ClickPoints[0].x,
+          ClickPoints[0].y,
+          genieInterfaces[i].rect,
         );
         if (distance < closestDistance) {
           closest = genieInterfaces[i];
@@ -211,7 +210,66 @@ const reactGenieClassModifier: GenieClassModifier = (
 
   // append additional function descriptor to class descriptor
   target.ClassDescriptor.functions.add(
-    new FuncDescriptor("Current", [], target.ClassDescriptor.className, true)
+    new FuncDescriptor(
+      "Current",
+      [],
+      target.ClassDescriptor.className,
+      true,
+      "The single object that the user is referring to. Usually either the object that is closest to the mouse click, or the object that is the largest on screen.",
+    ),
+  );
+
+  function AllCurrent() {
+    const currentClassName = target.ClassDescriptor.className;
+    const genieInterfaces = RetrieveInterfaces();
+
+    const objects: any[] = [];
+
+    if (ClickPoints.length > 1) {
+      for (const clickPoint of ClickPoints) {
+        // find the genie object that is closest to the click point
+        let closest = genieInterfaces[0];
+        let closestDistance = pointToRectDistanceSq(
+          clickPoint.x,
+          clickPoint.y,
+          closest.rect,
+        );
+        for (let i = 1; i < genieInterfaces.length; i++) {
+          if (genieInterfaces[i].className !== currentClassName) continue;
+          const distance = pointToRectDistanceSq(
+            clickPoint.x,
+            clickPoint.y,
+            genieInterfaces[i].rect,
+          );
+          if (distance < closestDistance) {
+            closest = genieInterfaces[i];
+            closestDistance = distance;
+          }
+        }
+        objects.push(InstantiateGenieObject(closest));
+      }
+      return objects;
+    } else {
+      for (const genieInterface of genieInterfaces) {
+        if (genieInterface.className !== currentClassName) continue;
+        objects.push(InstantiateGenieObject(genieInterface));
+      }
+      return objects;
+    }
+  }
+
+  // @ts-ignore
+  target.AllCurrent = AllCurrent;
+
+  // append additional function descriptor to class descriptor
+  target.ClassDescriptor.functions.add(
+    new FuncDescriptor(
+      "AllCurrent",
+      [],
+      target.ClassDescriptor.className + "[]",
+      true,
+      "All objects that the user is referring to. Usually either the objects that are closest to the mouse clicks (if multiple), or all objects of that type on screeen.",
+    ),
   );
 
   genieDispatch(() => {
@@ -253,7 +311,7 @@ export function initReactGenie() {
 export function GenieClassInterface(
   type: string,
   displayTitle: string | ((any) => string) | undefined = undefined,
-  displayPriority: number | ((target: any) => number) = 0
+  displayPriority: number | ((target: any) => number) = 0,
 ) {
   return function (target: any) {
     console.log("GenieFunction decorator called on " + target.name);

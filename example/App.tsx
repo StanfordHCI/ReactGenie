@@ -1,22 +1,14 @@
 import React, { default as ReactFromImport } from "react";
-import { default as ReactReduxFromImport, Provider } from "react-redux";
+import { Provider } from "react-redux";
 import { StyleSheet, View } from "react-native";
 import { reactGenieStore } from "./counterStore";
 import { CounterView } from "./CounterView";
-import {
-  ModalityProvider,
-  ReactFromModule,
-  ReactReduxFromModule,
-} from "reactgenie-lib";
+import { ModalityProvider, ReactFromModule } from "reactgenie-lib";
 import { CounterListView } from "./CounterListView";
 import { CounterAltView } from "./CounterAltView";
 import ENV from "./config";
 
 console.log("React is ReactFromModule", ReactFromModule === ReactFromImport);
-console.log(
-  "ReactRedux is ReactReduxFromModule: ",
-  ReactReduxFromImport === ReactReduxFromModule
-);
 
 const App = () => {
   return (
