@@ -153,7 +153,7 @@ test("test",   async () => {
     
 `;
 
-fs.writeFile("./__test__/parse.test.ts", prompt_test, function (err) {
+fs.writeFile("./__test__/parse.test.ts", parse_test, function (err) {
   if (err) throw err;
   console.log("Created parse test!");
 });
