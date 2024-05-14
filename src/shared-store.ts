@@ -189,20 +189,24 @@ export function displayResult(
         displayingObject = allDisplayingObjects[0];
         if (
           Object.hasOwn(allDisplayingObjects[0], "value") &&
+          Object.hasOwn(allDisplayingObjects[0].value, "localStore") &&
           allDisplayingObjects[0].value.localStore.__genieObjectType ===
             "HelperClass"
         ) {
-          continue; // can't display helper classes
+          displayingObjectType = "undefined";
+          displayingObject = null;
         }
       } else if (allDisplayingObjects.length > 1) {
         displayingObjectType = allDisplayingObjects[0].objectType + "[]";
         displayingObject = allDisplayingObjects;
         if (
           Object.hasOwn(allDisplayingObjects[0], "value") &&
+          Object.hasOwn(allDisplayingObjects[0].value, "localStore") &&
           allDisplayingObjects[0].value.localStore.__genieObjectType ===
             "HelperClass"
         ) {
-          continue; // can't display helper classes
+          displayingObjectType = "undefined";
+          displayingObject = null;
         }
       } else if (allDisplayingObjects.length === 0) {
         displayingObjectType = "undefined";
