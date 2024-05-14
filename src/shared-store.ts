@@ -132,9 +132,8 @@ export function executeGenieCode(command: string): GenieCodeResult {
   return genieDispatch(async () => {
     console.log(`before executing state ${JSON.stringify(sharedState)}`);
     try {
-      const result = await GenieInterpreter.dslInterpreter.interpretSteps(
-        command
-      );
+      const result =
+        await GenieInterpreter.dslInterpreter.interpretSteps(command);
       // console.log(`executed result ${result}`);
       return {
         success: true,
@@ -158,7 +157,7 @@ export function displayResult(
   executionResult: GenieCodeResult,
   transcript: string,
   parsed: string,
-  genieInterfaces: GenieInterfaceSpec[]
+  genieInterfaces: GenieInterfaceSpec[],
 ) {
   genieDispatch(() => {
     let allDisplayingObjects = [];
@@ -204,7 +203,11 @@ export function displayResult(
     let instantiatedDisplayingObject = null;
     if (displayingObject != null) {
       // if displayingObject is an array
-      if (displayingObject instanceof Array) {
+      if (
+        displayingObject instanceof Array &&
+        displayingObject.length >= 1 &&
+        displayingObject[0] instanceof DataClass
+      ) {
         // always display
         onScreen = false;
         instantiatedDisplayingObject = [];
@@ -236,8 +239,8 @@ export function displayResult(
                 genieInterface.className === Instance.constructor.name &&
                 shallowEqual(
                   genieInterface.key,
-                  Instance._getConstructorParams()
-                )
+                  Instance._getConstructorParams(),
+                ),
             );
             if (!targetInterface) {
               onScreen = false;
@@ -254,8 +257,8 @@ export function displayResult(
         parsed,
         stringifyResult(
           // now we only display the last result
-          executionResult.results[executionResult.results.length - 1].result
-        )
+          executionResult.results[executionResult.results.length - 1].result,
+        ),
       )
       .then((result) => {
         console.log(`respond result: ${result}`);
@@ -271,14 +274,14 @@ export function displayResult(
             const reactGenieState = sharedState as ReactGenieState;
             reactGenieState.navState = {
               objectViewClassName: AllGenieObjectInterfaces.getInterfaces(
-                instantiatedDisplayingObject
+                instantiatedDisplayingObject,
               ).viewClassName,
               objectConstructorParams:
                 allDisplayingObjects.length === 1
                   ? allDisplayingObjects[0].value._getConstructorParams()
                   : {
                       elements: allDisplayingObjects.map((displayingObject) =>
-                        displayingObject.value._getConstructorParams()
+                        displayingObject.value._getConstructorParams(),
                       ),
                     },
             };
