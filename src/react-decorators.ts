@@ -121,9 +121,9 @@ export interface GenieInterfaceSpec extends GenieObjectSpec {
 
 export function InstantiateGenieObject(objectSpec: GenieObjectSpec): any {
   // check if localStore is a property of objectSpec
-  if (Object.hasOwn(objectSpec, "localStore")) {
-    if (objectSpec["localStore"]["__genieObjectClass"] == "HelperClass") {
-      return objectSpec;
+  if (Object.hasOwn(objectSpec.key, "localStore")) {
+    if (objectSpec.key["localStore"]["__genieObjectType"] == "HelperClass") {
+      return objectSpec.key;
     }
   }
   const objectClass = AllGenieObjects[objectSpec.className] as typeof DataClass;
