@@ -186,9 +186,23 @@ export function displayResult(
       if (allDisplayingObjects.length === 1) {
         displayingObjectType = allDisplayingObjects[0].objectType;
         displayingObject = allDisplayingObjects[0];
+        if (
+          Object.hasOwn(allDisplayingObjects[0], "value") &&
+          allDisplayingObjects[0].value.localStore.__genieObjectType ===
+            "HelperClass"
+        ) {
+          continue; // can't display helper classes
+        }
       } else if (allDisplayingObjects.length > 1) {
         displayingObjectType = allDisplayingObjects[0].objectType + "[]";
         displayingObject = allDisplayingObjects;
+        if (
+          Object.hasOwn(allDisplayingObjects[0], "value") &&
+          allDisplayingObjects[0].value.localStore.__genieObjectType ===
+            "HelperClass"
+        ) {
+          continue; // can't display helper classes
+        }
       } else if (allDisplayingObjects.length === 0) {
         displayingObjectType = "undefined";
         displayingObject = null;
