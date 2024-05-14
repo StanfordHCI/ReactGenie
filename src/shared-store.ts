@@ -164,14 +164,15 @@ export function displayResult(
     let displayingObject = null;
     let displayingObjectType = "";
 
-    const result = executionResult.results;
+    const resultSteps: [{ ast: any; result: any }] =
+      executionResult.results[0]["steps"];
     let lastResult = true;
 
-    for (let i = result.length - 1; i >= 0; i--) {
-      if (i != result.length - 1) {
+    for (let i = resultSteps.length - 1; i >= 0; i--) {
+      if (i != resultSteps.length - 1) {
         lastResult = false;
       }
-      const step = result[i];
+      const step = resultSteps[i];
       allDisplayingObjects = [];
       console.log(`last executed step ${JSON.stringify(step)}`);
       const stepResult = step.result;
