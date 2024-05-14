@@ -203,11 +203,7 @@ export function displayResult(
     let instantiatedDisplayingObject = null;
     if (displayingObject != null) {
       // if displayingObject is an array
-      if (
-        displayingObject instanceof Array &&
-        displayingObject.length >= 1 &&
-        displayingObject[0] instanceof DataClass
-      ) {
+      if (displayingObject instanceof Array) {
         // always display
         onScreen = false;
         instantiatedDisplayingObject = [];
