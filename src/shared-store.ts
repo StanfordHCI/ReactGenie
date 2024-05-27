@@ -188,9 +188,7 @@ export function displayResult(
         displayingObjectType = allDisplayingObjects[0].objectType;
         displayingObject = allDisplayingObjects[0];
         if (
-          Object.hasOwn(allDisplayingObjects[0], "value") &&
-          Object.hasOwn(allDisplayingObjects[0].value, "localStore") &&
-          allDisplayingObjects[0].value.localStore.__genieObjectType ===
+          allDisplayingObjects[0]?.value?.localStore?.__genieObjectType ===
             "HelperClass"
         ) {
           displayingObjectType = "undefined";
@@ -200,9 +198,7 @@ export function displayResult(
         displayingObjectType = allDisplayingObjects[0].objectType + "[]";
         displayingObject = allDisplayingObjects;
         if (
-          Object.hasOwn(allDisplayingObjects[0], "value") &&
-          Object.hasOwn(allDisplayingObjects[0].value, "localStore") &&
-          allDisplayingObjects[0].value.localStore.__genieObjectType ===
+          allDisplayingObjects[0]?.value?.localStore?.__genieObjectType ===
             "HelperClass"
         ) {
           displayingObjectType = "undefined";
